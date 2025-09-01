@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -5,15 +6,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
-import { SockIcon } from '@/components/icons/SockIcon';
+import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, Download, ArrowRight } from 'lucide-react';
+import { Upload, Wand2, Loader2, Download, ArrowRight, Lightbulb, CheckCircle2, X } from 'lucide-react';
 import Image from 'next/image';
 
 const examplePrompts = [
@@ -40,15 +41,17 @@ export function SockBuilder() {
   const { watch, setValue } = form;
   const watchedParts = watch('parts');
   const watchedLogo = watch('logo');
+  const ankleType = "Ankle Length";
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
         toast({
             variant: "destructive",
             title: "File too large",
-            description: "Please upload a logo smaller than 5MB.",
+            description: "Please upload a logo smaller than 10MB.",
         });
         return;
       }
@@ -59,6 +62,10 @@ export function SockBuilder() {
       reader.readAsDataURL(file);
     }
   };
+  
+  const handleRemoveLogo = () => {
+    setValue('logo', '', { shouldValidate: true });
+  }
 
   const handlePartClick = (part: SockPart) => {
     const currentParts = watchedParts;
@@ -134,9 +141,9 @@ export function SockBuilder() {
   return (
     <div className="container mx-auto max-w-7xl px-4">
        <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Left Column */}
-            <Card className="bg-white p-8 shadow-xl">
+            <Card className="bg-white p-6 md:p-8 shadow-xl">
                  <h2 className="text-2xl font-bold uppercase tracking-tight">Upload Your <span className="text-primary">Logo</span></h2>
                  <p className="mt-1 text-sm text-gray-500">Upload your brand or team logo (PNG, JPG, SVG supported)</p>
                  <div className="mt-6">
@@ -146,24 +153,29 @@ export function SockBuilder() {
                       render={() => (
                         <FormItem>
                            <FormControl>
-                            <div className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10">
-                              <div className="text-center">
+                             <div className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10 relative">
                                 {watchedLogo ? (
-                                  <Image src={watchedLogo} alt="Logo preview" width={128} height={128} className="mx-auto h-24 w-24 object-contain" />
+                                    <>
+                                        <Image src={watchedLogo} alt="Logo preview" layout="fill" className="object-contain p-2" />
+                                        <div className="absolute top-2 right-2">
+                                            <Button variant="ghost" size="icon" onClick={handleRemoveLogo} className="bg-white/50 hover:bg-white/80 rounded-full h-8 w-8">
+                                                <X className="h-4 w-4 text-gray-600"/>
+                                            </Button>
+                                        </div>
+                                    </>
                                 ) : (
-                                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                    <div className="text-center w-full">
+                                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                                        <p className="mt-4 text-sm text-gray-600">
+                                            Drop your logo here, or click to browse
+                                        </p>
+                                        <p className="text-xs leading-5 text-gray-600">PNG, JPG, SVG up to 10MB</p>
+                                        <Button asChild variant="outline" className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full">
+                                            <label htmlFor="file-upload">Choose File</label>
+                                        </Button>
+                                        <Input id="file-upload" name="logo" type="file" className="sr-only" onChange={handleFileChange} accept="image/png, image/jpeg, image/svg+xml" />
+                                    </div>
                                 )}
-                                <p className="mt-4 text-sm text-gray-600">
-                                  Drop your logo here, or <label
-                                    htmlFor="file-upload"
-                                    className="cursor-pointer font-semibold text-primary hover:text-primary/80"
-                                  >
-                                    click to browse
-                                  </label>
-                                </p>
-                                <Input id="file-upload" name="logo" type="file" className="sr-only" onChange={handleFileChange} accept="image/png, image/jpeg, image/svg+xml" />
-                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, SVG up to 5MB</p>
-                              </div>
                             </div>
                           </FormControl>
                           <FormMessage className="text-center"/>
@@ -171,12 +183,48 @@ export function SockBuilder() {
                       )}
                     />
                  </div>
+                 <div className="mt-4 flex items-start gap-2 text-xs text-gray-500">
+                    <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-yellow-500" />
+                    <p>Tip: For best results, use a high-contrast logo with transparent background</p>
+                 </div>
+
+                 {watchedLogo && (
+                    <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                             <CheckCircle2 className="h-5 w-5 text-green-600" />
+                             <p className="font-semibold text-sm text-green-800">Logo uploaded successfully</p>
+                        </div>
+                         <button onClick={handleRemoveLogo}>
+                             <X className="h-5 w-5 text-green-600"/>
+                        </button>
+                    </div>
+                 )}
+
+                 <div className="mt-4 rounded-lg bg-gray-50 border border-gray-200 p-4 flex items-center gap-3">
+                    <Image src="/image 4.png" alt="Ankle sock" width={40} height={40} data-ai-hint="ankle sock" />
+                    <div>
+                        <p className="font-semibold text-sm">{ankleType}</p>
+                        <p className="text-xs text-gray-500">Ready for customization</p>
+                    </div>
+                 </div>
             </Card>
 
             {/* Right Column */}
             <div className="space-y-8">
-                <Card className="bg-white p-8 shadow-xl">
-                    <h2 className="text-2xl font-bold uppercase tracking-tight">Design <span className="text-primary">Prompt</span></h2>
+                <Card className="bg-white p-6 md:p-8 shadow-xl">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h2 className="text-2xl font-bold uppercase tracking-tight">Design <span className="text-primary">Prompt</span></h2>
+                            <p className="mt-1 text-xs text-gray-500">Example: Red athletic socks for my gym with bold logo placement with red on toe part blue on heel part cuff should be in black</p>
+                        </div>
+                        <Button type="submit" size="lg" className="rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/90" disabled={isGenerating}>
+                        {isGenerating ? (
+                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
+                        ) : (
+                            <><Wand2 className="mr-2 h-4 w-4" /> Generate</>
+                        )}
+                        </Button>
+                    </div>
                      <FormField
                       control={form.control}
                       name="prompt"
@@ -184,10 +232,10 @@ export function SockBuilder() {
                         <FormItem className="mt-4">
                           <FormControl>
                             <Textarea
-                              placeholder="Example: Red athletic socks for my gym with bold logo placement with red on toe part blue on heel part cuff should be in black"
+                              placeholder="Describe your vision..."
                               className="resize-none bg-gray-50"
                               {...field}
-                              rows={4}
+                              rows={3}
                               maxLength={250}
                             />
                           </FormControl>
@@ -195,13 +243,6 @@ export function SockBuilder() {
                         </FormItem>
                       )}
                     />
-                     <Button type="submit" size="lg" className="w-full mt-4 rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" disabled={isGenerating}>
-                        {isGenerating ? (
-                            <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Generating...</>
-                        ) : (
-                            <><Wand2 className="mr-2 h-5 w-5" /> Generate</>
-                        )}
-                    </Button>
                     <div className="mt-4 flex flex-wrap gap-2">
                         {examplePrompts.map(p => (
                              <button
@@ -217,10 +258,10 @@ export function SockBuilder() {
                     </div>
                 </Card>
 
-                <Card className="bg-white p-8 shadow-xl">
-                    <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span> (Multiple allowed)</h2>
+                <Card className="bg-white p-6 md:p-8 shadow-xl">
+                    <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span> <span className="text-base font-normal normal-case text-gray-500">(Multiple allowed)</span></h2>
                     <div className="mt-4">
-                        <SockIcon selectedParts={watchedParts} onPartClick={handlePartClick} />
+                        <PlacementSelector selectedParts={watchedParts} onPartClick={handlePartClick} />
                          <FormField
                             control={form.control}
                             name="parts"
