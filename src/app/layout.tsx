@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'HYPE',
-  description: 'Customize your custom sock design',
+  title: 'SockAI',
+  description: 'Generate your custom sock design with AI',
 };
 
 export default function RootLayout({
