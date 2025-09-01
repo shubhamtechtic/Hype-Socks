@@ -6,17 +6,29 @@ import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const sockLengths = [
-  { name: 'Ankle', icon: 'https://picsum.photos/300/400' },
-  { name: 'Quarter', icon: 'https://picsum.photos/300/400' },
-  { name: 'Crew', icon: 'https://picsum.photos/300/400' },
-  { name: 'Knee High', icon: 'https://picsum.photos/300/400' },
-  { name: 'Over The Knee', icon: 'https://picsum.photos/300/400' },
+  { name: 'Ankle', icon: '/image 4.png' },
+  { name: 'Quarter', icon: '/image 5.png' },
+  { name: 'Crew', icon: '/image 6.png' },
+  { name: 'Knee High', icon: '/image 7.png' },
+  { name: 'Over The Knee', icon: '/image 8.png' },
 ];
 
 export function LengthSelector() {
   const [selected, setSelected] = useState<string>('Crew');
+  const [showBuilder, setShowBuilder] = useState(false);
+  const router = useRouter();
+
+  const handleContinue = () => {
+    // Here you would navigate to the next step, e.g., the sock builder
+    // For now, we'll just log it.
+    console.log(`Selected ${selected} socks. Continuing to builder...`);
+    router.push('/#sock-builder');
+    setShowBuilder(true); // This might be used to show the builder on the same page
+  };
+
 
   return (
     <div className="container mx-auto max-w-4xl px-4">
@@ -36,7 +48,7 @@ export function LengthSelector() {
               onClick={() => setSelected(sock.name)}
               className={cn(
                 'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md',
-                selected === sock.name ? 'border-accent bg-accent/5' : 'border-transparent'
+                selected === sock.name ? 'border-accent bg-accent/5' : 'border-gray-200'
               )}
             >
               {selected === sock.name && (
@@ -59,7 +71,7 @@ export function LengthSelector() {
           <Button variant="outline" size="lg" className="border-2 border-primary px-10 py-6 text-base font-bold text-primary hover:bg-primary/5">
             <ChevronLeft className="mr-2 h-5 w-5" /> Back
           </Button>
-          <Button size="lg" className="bg-primary px-10 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90">
+          <Button size="lg" className="bg-primary px-10 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
             Continue <ChevronRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
