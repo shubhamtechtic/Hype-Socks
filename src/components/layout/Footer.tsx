@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="bg-[#0D0D0D] text-white">
       <div className="container mx-auto px-4 py-12 md:px-6">
         <div className="flex flex-col items-center gap-8">
-          <Image src="https://hypesocks.com/wp-content/uploads/2025/01/Group-1321314334-2048x590.png" alt="Hype Socks Logo" width={150} height={43} className="h-12 w-auto" />
+          <Image src="https://hypesocks.com/wp-content/uploads/2025/01/Mask-group-7-768x221.png" alt="Hype Socks Logo" width={150} height={43} className="h-12 w-auto" />
           <div className="w-full border-t border-gray-700"></div>
           <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-5 md:text-left">
             <Link href="#" className="text-sm hover:underline">Home</Link>
