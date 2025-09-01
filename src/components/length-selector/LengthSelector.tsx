@@ -22,7 +22,10 @@ export function LengthSelector() {
   const router = useRouter();
 
   const handleContinue = () => {
-    router.push('/#sock-builder');
+    const element = document.getElementById('sock-builder');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   
   const handleGoBack = () => {
@@ -32,7 +35,7 @@ export function LengthSelector() {
   const selectedSock = sockLengths.find((s) => s.name === selected);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4">
+    <div className="container mx-auto max-w-5xl px-4">
       <Card className="bg-white p-8 shadow-xl md:p-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold uppercase tracking-tight md:text-4xl">
@@ -47,14 +50,14 @@ export function LengthSelector() {
 
         <div className="mt-10">
           {!selected ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {sockLengths.map((sock) => (
                 <div
                   key={sock.name}
                   onClick={() => setSelected(sock.name)}
                   className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md'
                 >
-                  <div className="relative mx-auto h-40 w-40">
+                  <div className="relative mx-auto h-40 w-full md:h-48">
                     <Image
                       src={sock.icon}
                       alt={`${sock.name} sock`}
@@ -73,12 +76,12 @@ export function LengthSelector() {
                     <div className="flex w-full items-center justify-center">
                         <div
                         className={cn(
-                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md',
+                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all max-w-md w-full',
                             'border-accent bg-accent/5'
                         )}
                         >
-                            <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white" />
-                        <div className="relative mx-auto h-64 w-64">
+                            <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white md:h-6 md:w-6" />
+                        <div className="relative mx-auto h-80 w-full md:h-96">
                             <Image
                             src={selectedSock.icon}
                             alt={`${selectedSock.name} sock`}
