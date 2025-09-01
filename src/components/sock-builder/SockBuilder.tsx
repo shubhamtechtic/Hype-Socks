@@ -197,7 +197,7 @@ export function SockBuilder() {
                  )}
 
                  <div className="mt-4 rounded-lg bg-gray-50 border border-gray-200 p-4 flex items-center gap-3">
-                    <Image src="/image 4.png" alt="Ankle sock" width={40} height={40} data-ai-hint="ankle sock" />
+                    <Image src="/image 4.png" alt="Ankle sock" width={40} height={40} data-ai-hint="ankle sock" className="animate-tilt-shaking" />
                     <div>
                         <p className="font-semibold text-sm">{ankleType}</p>
                         <p className="text-xs text-gray-500">Ready for customization</p>

@@ -28,6 +28,7 @@ export function PlacementSelector({ selectedPart, onPartClick }: PlacementSelect
           alt="Sock for placement selection" 
           layout="fill" 
           objectFit="contain" 
+          className="animate-tilt-shaking"
           data-ai-hint="custom sock"
         />
         {placementOptions.map((part) => {

@@ -61,7 +61,7 @@ export function LengthSelector() {
                       src={sock.icon}
                       alt={`${sock.name} sock`}
                       fill
-                      className="object-contain"
+                      className="object-contain animate-tilt-shaking"
                       data-ai-hint={`${sock.name.toLowerCase()} sock`}
                     />
                   </div>
@@ -85,7 +85,7 @@ export function LengthSelector() {
                             src={selectedSock.icon}
                             alt={`${selectedSock.name} sock`}
                             fill
-                            className="object-contain"
+                            className="object-contain animate-tilt-shaking"
                             data-ai-hint={`${selectedSock.name.toLowerCase()} sock`}
                             />
                         </div>

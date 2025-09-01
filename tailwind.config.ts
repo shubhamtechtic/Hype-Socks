@@ -76,10 +76,18 @@ export default {
             height: '0',
           },
         },
+        'tilt-shaking': {
+          '0%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(2deg)' },
+          '50%': { transform: 'rotate(0deg)' },
+          '75%': { transform: 'rotate(-2deg)' },
+          '100%': { transform: 'rotate(0deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'tilt-shaking': 'tilt-shaking 3s ease-in-out infinite',
       },
     },
   },
