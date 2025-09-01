@@ -13,7 +13,7 @@ interface PlacementSelectorProps {
 }
 
 const placementOptions: { id: SockPart; name: string; description: string, position: string }[] = [
-  { id: 'instep', name: 'Instep', description: 'Top of the foot', position: "top-[45%] left-[55%] w-[30%] h-[15%]" },
+  { id: 'instep', name: 'Instep', description: 'Top of the foot', position: "top-[55%] left-[45%] w-[40%] h-[15%]" },
   { id: 'heel', name: 'Heel', description: 'Back of the heel', position: "top-[60%] left-[22%] w-[25%] h-[20%]" },
   { id: 'ankle', name: 'Side', description: 'Outer side panel', position: "top-[20%] left-[30%] w-[30%] h-[35%]" },
   { id: 'sole', name: 'Sole', description: 'Bottom of the foot', position: "bottom-[5%] left-[35%] w-[40%] h-[15%]" },
