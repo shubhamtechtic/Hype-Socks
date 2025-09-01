@@ -34,7 +34,7 @@ export function LengthSelector() {
   const selectedSock = sockLengths.find((s) => s.name === selected);
 
   return (
-    <div className="container mx-auto max-w-5xl px-4">
+    <div className="container mx-auto max-w-7xl px-4">
       <Card className="bg-white p-8 shadow-xl md:p-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold uppercase tracking-tight md:text-4xl">
