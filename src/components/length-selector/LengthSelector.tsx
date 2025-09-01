@@ -38,7 +38,7 @@ export function LengthSelector() {
       <Card className="bg-white p-8 shadow-xl md:p-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold uppercase tracking-tight md:text-4xl">
-            Choose Your <span className="text-accent">Length</span>
+            Choose Your <span className="text-primary">Length</span>
           </h1>
           <p className="mt-2 text-sm text-gray-500 md:text-base">
             {selected
@@ -54,9 +54,9 @@ export function LengthSelector() {
                 <div
                   key={sock.name}
                   onClick={() => setSelected(sock.name)}
-                  className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md'
+                  className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
                 >
-                  <div className="relative mx-auto h-40 w-full md:h-48">
+                  <div className="relative mx-auto h-48 w-full md:h-64">
                     <Image
                       src={sock.icon}
                       alt={`${sock.name} sock`}
@@ -76,10 +76,10 @@ export function LengthSelector() {
                         <div
                         className={cn(
                             'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all max-w-sm w-full',
-                            'border-accent bg-accent/5'
+                            'border-primary bg-primary/5'
                         )}
                         >
-                            <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white md:h-6 md:w-6" />
+                            <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-primary text-white md:h-6 md:w-6" />
                         <div className="relative mx-auto h-80 w-full md:h-96">
                             <Image
                             src={selectedSock.icon}
@@ -99,7 +99,7 @@ export function LengthSelector() {
 
         <div className="mt-12 flex justify-center gap-4">
           {selected && (
-            <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5 hover:text-primary" onClick={handleGoBack}>
+            <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
                 <ChevronLeft className="mr-2 h-5 w-5" /> Back
             </Button>
           )}
