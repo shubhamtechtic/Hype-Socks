@@ -1,11 +1,15 @@
-import { Header } from '@/components/sock-builder/Header';
-import { SockBuilder } from '@/components/sock-builder/SockBuilder';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { LengthSelector } from '@/components/length-selector/LengthSelector';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-[#f0f2f5]">
       <Header />
-      <SockBuilder />
+      <main className="flex-1 py-12 md:py-20">
+        <LengthSelector />
+      </main>
+      <Footer />
     </div>
   );
 }

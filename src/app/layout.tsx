@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'SockAI',
-  description: 'Generate your custom sock design with AI',
+  title: 'HYPE',
+  description: 'Customize your custom sock design',
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased')}>
+      <body className={cn('font-sans antialiased')}>
         {children}
         <Toaster />
       </body>
