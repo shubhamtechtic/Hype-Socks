@@ -99,7 +99,7 @@ export function LengthSelector() {
 
         <div className="mt-12 flex justify-center gap-4">
           {selected && (
-            <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5" onClick={handleGoBack}>
+            <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5 hover:text-primary" onClick={handleGoBack}>
                 <ChevronLeft className="mr-2 h-5 w-5" /> Back
             </Button>
           )}
