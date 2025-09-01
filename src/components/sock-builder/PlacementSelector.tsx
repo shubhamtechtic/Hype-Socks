@@ -27,9 +27,8 @@ export function PlacementSelector({ selectedPart, onPartClick, sockImage }: Plac
         <Image 
           src={sockImage} 
           alt="Sock for placement selection" 
-          layout="fill" 
-          objectFit="contain" 
-          className="animate-tilt-shaking"
+          fill
+          className="object-contain animate-tilt-shaking"
           data-ai-hint="custom sock"
         />
         {placementOptions.map((part) => {

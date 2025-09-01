@@ -117,7 +117,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                     Your <span className="text-primary">Design</span> is Ready!
                 </h2>
                 <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
-                    <Image src={generatedDesign} alt="Generated sock design" layout="fill" objectFit="contain" className="rounded-lg" />
+                    <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
                 </div>
                 <div className="mt-8 flex justify-center gap-4">
                     <Button asChild size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90">
@@ -163,7 +163,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                     <div className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10 relative">
                                         {watchedLogo ? (
                                             <>
-                                                <Image src={watchedLogo} alt="Logo preview" layout="fill" className="object-contain p-2" />
+                                                <Image src={watchedLogo} alt="Logo preview" fill className="object-contain p-2" />
                                                 <div className="absolute top-2 right-2">
                                                     <Button variant="ghost" size="icon" onClick={handleRemoveLogo} className="bg-white/50 hover:bg-white/80 rounded-full h-8 w-8">
                                                         <X className="h-4 w-4 text-gray-600"/>
