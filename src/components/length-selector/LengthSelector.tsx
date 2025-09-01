@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -17,11 +18,15 @@ const sockLengths = [
 ];
 
 export function LengthSelector() {
-  const [selected, setSelected] = useState<string>('Ankle');
+  const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
 
   const handleContinue = () => {
     router.push('/#sock-builder');
+  };
+  
+  const handleGoBack = () => {
+    setSelected(null);
   };
 
   const selectedSock = sockLengths.find((s) => s.name === selected);
@@ -34,51 +39,69 @@ export function LengthSelector() {
             Choose Your <span className="text-accent">Length</span>
           </h1>
           <p className="mt-2 text-sm text-gray-500 md:text-base">
-            Customize socks with your name, logo, and colors. Select your length and start customizing now.
+            {selected
+              ? 'You have selected your sock length. Proceed to customize it.'
+              : 'Customize socks with your name, logo, and colors. Select your length and start customizing now.'}
           </p>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-8">
-          <div className="flex w-full items-center justify-center">
-             <div
-              className={cn(
-                'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md',
-                'border-accent bg-accent/5'
-              )}
-            >
-                <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white" />
-              <div className="relative mx-auto h-64 w-64">
-                <Image
-                  src={selectedSock?.icon || '/image 4.png'}
-                  alt={`${selectedSock?.name} sock`}
-                  fill
-                  className="object-contain"
-                  data-ai-hint={`${selectedSock?.name.toLowerCase()} sock`}
-                />
-              </div>
-              <p className="mt-2 text-lg font-semibold">{selectedSock?.name} Length</p>
+        <div className="mt-10">
+          {!selected ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {sockLengths.map((sock) => (
+                <div
+                  key={sock.name}
+                  onClick={() => setSelected(sock.name)}
+                  className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md'
+                >
+                  <div className="relative mx-auto h-40 w-40">
+                    <Image
+                      src={sock.icon}
+                      alt={`${sock.name} sock`}
+                      fill
+                      className="object-contain"
+                      data-ai-hint={`${sock.name.toLowerCase()} sock`}
+                    />
+                  </div>
+                  <p className="mt-2 text-sm font-semibold">{sock.name}</p>
+                </div>
+              ))}
             </div>
-          </div>
-          <div className="flex justify-center gap-2">
-            {sockLengths.map((sock) => (
-              <button
-                key={sock.name}
-                onClick={() => setSelected(sock.name)}
-                className={cn(
-                  'h-3 w-3 rounded-full transition-colors',
-                  selected === sock.name ? 'bg-primary' : 'bg-gray-300 hover:bg-gray-400'
-                )}
-                aria-label={`Select ${sock.name} length`}
-              />
-            ))}
-          </div>
+          ) : (
+            selectedSock && (
+                <div className="flex flex-col items-center justify-center gap-8">
+                    <div className="flex w-full items-center justify-center">
+                        <div
+                        className={cn(
+                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md',
+                            'border-accent bg-accent/5'
+                        )}
+                        >
+                            <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white" />
+                        <div className="relative mx-auto h-64 w-64">
+                            <Image
+                            src={selectedSock.icon}
+                            alt={`${selectedSock.name} sock`}
+                            fill
+                            className="object-contain"
+                            data-ai-hint={`${selectedSock.name.toLowerCase()} sock`}
+                            />
+                        </div>
+                        <p className="mt-2 text-lg font-semibold">{selectedSock.name} Length</p>
+                        </div>
+                    </div>
+                </div>
+            )
+          )}
         </div>
 
         <div className="mt-12 flex justify-center gap-4">
-          <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5">
-            <ChevronLeft className="mr-2 h-5 w-5" /> Back
-          </Button>
-          <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
+          {selected && (
+            <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5" onClick={handleGoBack}>
+                <ChevronLeft className="mr-2 h-5 w-5" /> Back
+            </Button>
+          )}
+          <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue} disabled={!selected}>
             Continue <ChevronRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
