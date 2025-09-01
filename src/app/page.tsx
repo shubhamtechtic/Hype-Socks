@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex min-h-screen flex-col bg-[#f0f2f5]">
       <Header />
       <main className="flex-1 py-12 md:py-20">
-        <SockBuilder />
+        <LengthSelector />
       </main>
       <Footer />
     </div>
