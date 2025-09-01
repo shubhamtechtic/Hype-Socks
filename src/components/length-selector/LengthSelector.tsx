@@ -22,9 +22,8 @@ export function LengthSelector() {
   const router = useRouter();
 
   const handleContinue = () => {
-    const element = document.getElementById('sock-builder');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (selected) {
+      router.push('/build');
     }
   };
   
@@ -76,7 +75,7 @@ export function LengthSelector() {
                     <div className="flex w-full items-center justify-center">
                         <div
                         className={cn(
-                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all max-w-md w-full',
+                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all max-w-sm w-full',
                             'border-accent bg-accent/5'
                         )}
                         >
