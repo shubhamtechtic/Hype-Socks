@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import { PageWrapper } from '@/components/layout/PageWrapper';
 
 export const metadata: Metadata = {
   title: 'SockAI',
@@ -24,7 +25,9 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-sans antialiased')}>
-        {children}
+        <PageWrapper>
+            {children}
+        </PageWrapper>
         <Toaster />
       </body>
     </html>
