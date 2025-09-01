@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -10,7 +11,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import wav from 'wav';
 
 const GenerateSockDesignInputSchema = z.object({
   logoDataUri: z
@@ -35,14 +35,13 @@ export async function generateSockDesign(input: GenerateSockDesignInput): Promis
 const generateSockDesignPrompt = ai.definePrompt({
   name: 'generateSockDesignPrompt',
   input: {schema: GenerateSockDesignInputSchema},
-  output: {schema: GenerateSockDesignOutputSchema},
   prompt: `You are a sock design expert. Create a sock design based on the following logo, prompt and selected sock parts.
 
 Logo: {{media url=logoDataUri}}
 Prompt: {{{prompt}}}
-Selected Parts: {{{selectedParts}}}
+Selected Parts: {{#each selectedParts}}{{{this}}}{{/each}}
 
-Ensure the generated image is seamless and suitable for printing on a sock.  The output should be a data URI representing the generated image.`,
+Ensure the generated image is seamless and suitable for printing on a sock. The output should be a data URI representing the generated image.`,
 });
 
 const generateSockDesignFlow = ai.defineFlow(
@@ -54,11 +53,13 @@ const generateSockDesignFlow = ai.defineFlow(
   async input => {
     const {media} = await ai.generate({
       model: 'googleai/imagen-4.0-fast-generate-001',
-      prompt: `Create a sock design based on the following logo, prompt and selected sock parts.\n\nLogo: {{media url=${input.logoDataUri}}}\nPrompt: ${input.prompt}\nSelected Parts: ${input.selectedParts}`,//generateSockDesignPrompt(input);
+      prompt: await generateSockDesignPrompt.render({input}),
     });
+    if (!media) {
+      throw new Error('Image generation failed to produce media.');
+    }
     return {
       designDataUri: media.url,
     };
   }
 );
-
