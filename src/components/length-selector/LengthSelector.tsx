@@ -8,22 +8,18 @@ import { CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 
 const sockLengths = [
-  { name: 'Ankle', icon: '/ankle-sock.svg' },
-  { name: 'Quarter', icon: '/quarter-sock.svg' },
-  { name: 'Crew', icon: '/crew-sock.svg' },
-  { name: 'Knee High', icon: '/knee-high-sock.svg' },
-  { name: 'Over The Knee', icon: '/over-the-knee-sock.svg' },
+  { name: 'Ankle', icon: 'https://picsum.photos/200/300' },
+  { name: 'Quarter', icon: 'https://picsum.photos/200/300' },
+  { name: 'Crew', icon: 'https://picsum.photos/200/300' },
+  { name: 'Knee High', icon: 'https://picsum.photos/200/300' },
+  { name: 'Over The Knee', icon: 'https://picsum.photos/200/300' },
 ];
 
 export function LengthSelector() {
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string>('Crew');
 
-  const toggleSelection = (name: string) => {
-    setSelected((prev) =>
-      prev.includes(name)
-        ? prev.filter((item) => item !== name)
-        : [...prev, name]
-    );
+  const handleSelection = (name: string) => {
+    setSelected(name);
   };
 
   return (
@@ -41,17 +37,23 @@ export function LengthSelector() {
           {sockLengths.map((sock) => (
             <div
               key={sock.name}
-              onClick={() => toggleSelection(sock.name)}
+              onClick={() => handleSelection(sock.name)}
               className={cn(
                 'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent',
-                selected.includes(sock.name) ? 'border-accent bg-accent/5' : 'border-gray-200'
+                selected === sock.name ? 'border-accent bg-accent/5' : 'border-gray-200'
               )}
             >
-              {selected.includes(sock.name) && (
+              {selected === sock.name && (
                 <CheckCircle2 className="absolute -right-2 -top-2 h-6 w-6 fill-accent text-white" />
               )}
               <div className="relative mx-auto h-24 w-24">
-                <Image src={sock.icon} alt={`${sock.name} sock`} fill className="object-contain" />
+                <Image 
+                  src={sock.icon} 
+                  alt={`${sock.name} sock`} 
+                  fill 
+                  className="object-contain"
+                  data-ai-hint={`${sock.name.toLowerCase()} sock`}
+                />
               </div>
               <p className="mt-2 text-sm font-semibold">{sock.name}</p>
             </div>
@@ -59,7 +61,7 @@ export function LengthSelector() {
         </div>
         <div className="mt-12 flex justify-center">
           <Button size="lg" className="bg-primary px-10 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90">
-            Continue &gt;
+            Continue >
           </Button>
         </div>
       </Card>
