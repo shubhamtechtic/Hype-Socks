@@ -17,18 +17,14 @@ const sockLengths = [
 ];
 
 export function LengthSelector() {
-  const [selected, setSelected] = useState<string>('Crew');
-  const [showBuilder, setShowBuilder] = useState(false);
+  const [selected, setSelected] = useState<string>('Ankle');
   const router = useRouter();
 
   const handleContinue = () => {
-    // Here you would navigate to the next step, e.g., the sock builder
-    // For now, we'll just log it.
-    console.log(`Selected ${selected} socks. Continuing to builder...`);
     router.push('/#sock-builder');
-    setShowBuilder(true); // This might be used to show the builder on the same page
   };
 
+  const selectedSock = sockLengths.find((s) => s.name === selected);
 
   return (
     <div className="container mx-auto max-w-4xl px-4">
@@ -41,37 +37,48 @@ export function LengthSelector() {
             Customize socks with your name, logo, and colors. Select your length and start customizing now.
           </p>
         </div>
-        <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-5">
-          {sockLengths.map((sock) => (
-            <div
-              key={sock.name}
-              onClick={() => setSelected(sock.name)}
+
+        <div className="mt-10 flex flex-col items-center justify-center gap-8">
+          <div className="flex w-full items-center justify-center">
+             <div
               className={cn(
                 'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-accent hover:shadow-md',
-                selected === sock.name ? 'border-accent bg-accent/5' : 'border-gray-200'
+                'border-accent bg-accent/5'
               )}
             >
-              {selected === sock.name && (
                 <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 fill-accent text-white" />
-              )}
-              <div className="relative mx-auto h-48 w-full">
+              <div className="relative mx-auto h-64 w-64">
                 <Image
-                  src={sock.icon}
-                  alt={`${sock.name} sock`}
+                  src={selectedSock?.icon || '/image 4.png'}
+                  alt={`${selectedSock?.name} sock`}
                   fill
                   className="object-contain"
-                  data-ai-hint={`${sock.name.toLowerCase()} sock`}
+                  data-ai-hint={`${selectedSock?.name.toLowerCase()} sock`}
                 />
               </div>
-              <p className="mt-2 text-sm font-semibold">{sock.name} Length</p>
+              <p className="mt-2 text-lg font-semibold">{selectedSock?.name} Length</p>
             </div>
-          ))}
+          </div>
+          <div className="flex justify-center gap-2">
+            {sockLengths.map((sock) => (
+              <button
+                key={sock.name}
+                onClick={() => setSelected(sock.name)}
+                className={cn(
+                  'h-3 w-3 rounded-full transition-colors',
+                  selected === sock.name ? 'bg-primary' : 'bg-gray-300 hover:bg-gray-400'
+                )}
+                aria-label={`Select ${sock.name} length`}
+              />
+            ))}
+          </div>
         </div>
+
         <div className="mt-12 flex justify-center gap-4">
-          <Button variant="outline" size="lg" className="border-2 border-primary px-10 py-6 text-base font-bold text-primary hover:bg-primary/5">
+          <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5">
             <ChevronLeft className="mr-2 h-5 w-5" /> Back
           </Button>
-          <Button size="lg" className="bg-primary px-10 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
+          <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
             Continue <ChevronRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
