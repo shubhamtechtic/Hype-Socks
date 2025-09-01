@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { MessageSquare, Instagram, Twitter, Facebook } from "lucide-react";
-import { HypeLogo } from "@/components/icons/HypeLogo";
+import Image from "next/image";
 
 export function Footer() {
   return (
     <footer className="bg-[#0D0D0D] text-white">
       <div className="container mx-auto px-4 py-12 md:px-6">
         <div className="flex flex-col items-center gap-8">
-          <HypeLogo className="h-12 w-auto" />
+          <Image src="https://hypesocks.com/wp-content/uploads/2025/01/Group-1321314334-2048x590.png" alt="Hype Socks Logo" width={150} height={43} className="h-12 w-auto" />
           <div className="w-full border-t border-gray-700"></div>
           <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-5 md:text-left">
             <Link href="#" className="text-sm hover:underline">Home</Link>

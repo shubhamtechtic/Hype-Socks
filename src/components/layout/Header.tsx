@@ -7,18 +7,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HypeLogo } from "@/components/icons/HypeLogo";
+import Image from "next/image";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <HypeLogo className="h-8 w-auto" />
+          <Image src="https://hypesocks.com/wp-content/uploads/2025/01/Group-1321314334-2048x590.png" alt="Hype Socks Logo" width={120} height={35} className="h-8 w-auto" />
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           <Link href="/" className="text-sm font-medium text-gray-600 hover:text-gray-900">HOME</Link>
-          <Link href="#" className="text-sm font-medium text-gray-600 hover:text-gray-900">BUILDER</Link>
+          <Link href="/build" className="text-sm font-medium text-gray-600 hover:text-gray-900">BUILDER</Link>
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900">
               BY SPORT <ChevronDown className="h-4 w-4" />
