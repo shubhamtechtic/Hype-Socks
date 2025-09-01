@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
 interface PlacementSelectorProps {
-  selectedParts: SockPart[];
+  selectedPart: SockPart | string;
   onPartClick: (part: SockPart) => void;
 }
 
@@ -19,7 +19,7 @@ const placementOptions: { id: SockPart; name: string; description: string, posit
   { id: 'toe', name: 'Toe', description: 'Front toe area', position: "top-[50%] right-[2%] w-[25%] h-[25%]" },
 ];
 
-export function PlacementSelector({ selectedParts, onPartClick }: PlacementSelectorProps) {
+export function PlacementSelector({ selectedPart, onPartClick }: PlacementSelectorProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
       <div className="relative w-full aspect-square">
@@ -31,7 +31,7 @@ export function PlacementSelector({ selectedParts, onPartClick }: PlacementSelec
           data-ai-hint="custom sock"
         />
         {placementOptions.map((part) => {
-            const isSelected = selectedParts.includes(part.id);
+            const isSelected = selectedPart === part.id;
             return isSelected && (
                 <div key={part.id} className={cn("absolute border-2 border-dashed border-black rounded-md flex items-center justify-center", part.position)}>
                     <div className="bg-black/70 text-white rounded-full p-1">
@@ -50,7 +50,7 @@ export function PlacementSelector({ selectedParts, onPartClick }: PlacementSelec
             onClick={() => onPartClick(option.id)}
             className={cn(
               'w-full text-left p-3 rounded-lg border-2 transition-all',
-              selectedParts.includes(option.id)
+              selectedPart === option.id
                 ? 'bg-primary border-primary text-primary-foreground'
                 : 'bg-white border-gray-200 hover:border-gray-400'
             )}

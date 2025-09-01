@@ -1,3 +1,4 @@
+
 'use server';
 
 import { generateSockDesign, GenerateSockDesignInput } from '@/ai/flows/generate-sock-design';
@@ -16,7 +17,7 @@ export async function generateDesignAction(values: unknown) {
     const input: GenerateSockDesignInput = {
       logoDataUri: logo,
       prompt,
-      selectedParts: parts,
+      selectedParts: [parts],
     };
     const result = await generateSockDesign(input);
     return { data: result };

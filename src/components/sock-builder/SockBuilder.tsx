@@ -33,7 +33,7 @@ export function SockBuilder() {
     defaultValues: {
       logo: '',
       prompt: '',
-      parts: [],
+      parts: '',
     },
     mode: 'onChange',
   });
@@ -68,11 +68,7 @@ export function SockBuilder() {
   }
 
   const handlePartClick = (part: SockPart) => {
-    const currentParts = watchedParts;
-    const newParts = currentParts.includes(part)
-      ? currentParts.filter((p) => p !== part)
-      : [...currentParts, part];
-    setValue('parts', newParts, { shouldValidate: true });
+    setValue('parts', part, { shouldValidate: true });
   };
 
   const onSubmit = async (values: SockDesignForm) => {
@@ -259,9 +255,9 @@ export function SockBuilder() {
                 </Card>
 
                 <Card className="bg-white p-6 md:p-8 shadow-xl">
-                    <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span> <span className="text-base font-normal normal-case text-gray-500">(Multiple allowed)</span></h2>
+                    <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span></h2>
                     <div className="mt-4">
-                        <PlacementSelector selectedParts={watchedParts} onPartClick={handlePartClick} />
+                        <PlacementSelector selectedPart={watchedParts} onPartClick={handlePartClick} />
                          <FormField
                             control={form.control}
                             name="parts"
