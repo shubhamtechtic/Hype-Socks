@@ -17,7 +17,7 @@ const placementOptions: { id: SockPart; name: string; description: string, posit
   { id: 'heel', name: 'Heel', description: 'Back of the heel', position: "top-[60%] left-[22%] w-[25%] h-[20%]" },
   { id: 'ankle', name: 'Side', description: 'Outer side panel', position: "top-[20%] left-[30%] w-[30%] h-[35%]" },
   { id: 'sole', name: 'Sole', description: 'Bottom of the foot', position: "bottom-[5%] left-[35%] w-[40%] h-[15%]" },
-  { id: 'toe', name: 'Toe', description: 'Front toe area', position: "top-[50%] right-[2%] w-[25%] h-[25%]" },
+  { id: 'toe', name: 'Toe', description: 'Front toe area', position: "top-[65%] right-[2%] w-[25%] h-[20%]" },
 ];
 
 export function PlacementSelector({ selectedPart, onPartClick, sockImage }: PlacementSelectorProps) {
