@@ -9,6 +9,7 @@ import { Check } from 'lucide-react';
 interface PlacementSelectorProps {
   selectedPart: SockPart | string;
   onPartClick: (part: SockPart) => void;
+  sockImage: string;
 }
 
 const placementOptions: { id: SockPart; name: string; description: string, position: string }[] = [
@@ -19,12 +20,12 @@ const placementOptions: { id: SockPart; name: string; description: string, posit
   { id: 'toe', name: 'Toe', description: 'Front toe area', position: "top-[50%] right-[2%] w-[25%] h-[25%]" },
 ];
 
-export function PlacementSelector({ selectedPart, onPartClick }: PlacementSelectorProps) {
+export function PlacementSelector({ selectedPart, onPartClick, sockImage }: PlacementSelectorProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
       <div className="relative w-full aspect-square">
         <Image 
-          src="/image 4.png" 
+          src={sockImage} 
           alt="Sock for placement selection" 
           layout="fill" 
           objectFit="contain" 

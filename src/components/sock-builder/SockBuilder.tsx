@@ -23,7 +23,12 @@ const examplePrompts = [
     { text: "Neon green running socks with moisture-wicking design" },
 ]
 
-export function SockBuilder() {
+interface SockBuilderProps {
+    sockLength: string;
+    sockImage: string;
+}
+
+export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [generatedDesign, setGeneratedDesign] = React.useState<string | null>(null);
 
@@ -41,9 +46,7 @@ export function SockBuilder() {
   const { watch, setValue } = form;
   const watchedParts = watch('parts');
   const watchedLogo = watch('logo');
-  const ankleType = "Ankle Length";
-
-
+  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -197,9 +200,9 @@ export function SockBuilder() {
                  )}
 
                  <div className="mt-4 rounded-lg bg-gray-50 border border-gray-200 p-4 flex items-center gap-3">
-                    <Image src="/image 4.png" alt="Ankle sock" width={40} height={40} data-ai-hint="ankle sock" className="animate-tilt-shaking" />
+                    <Image src={sockImage} alt={sockLength} width={40} height={40} data-ai-hint="custom sock" className="animate-tilt-shaking" />
                     <div>
-                        <p className="font-semibold text-sm">{ankleType}</p>
+                        <p className="font-semibold text-sm">{sockLength}</p>
                         <p className="text-xs text-gray-500">Ready for customization</p>
                     </div>
                  </div>
@@ -257,7 +260,7 @@ export function SockBuilder() {
                 <Card className="bg-white p-6 md:p-8 shadow-xl">
                     <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span></h2>
                     <div className="mt-4">
-                        <PlacementSelector selectedPart={watchedParts} onPartClick={handlePartClick} />
+                        <PlacementSelector selectedPart={watchedParts} onPartClick={handlePartClick} sockImage={sockImage} />
                          <FormField
                             control={form.control}
                             name="parts"

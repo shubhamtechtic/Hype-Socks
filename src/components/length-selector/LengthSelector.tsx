@@ -23,7 +23,7 @@ export function LengthSelector() {
 
   const handleContinue = () => {
     if (selected) {
-      router.push('/build');
+      router.push(`/build?length=${encodeURIComponent(selected)}`);
     }
   };
   
