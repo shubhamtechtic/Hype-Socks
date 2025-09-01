@@ -225,7 +225,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             <FormItem className="mt-4">
                             <FormControl>
                                 <Textarea
-                                placeholder="Describe your vision..."
+                                placeholder="Example: Red athletic socks for my gym with bold logo placement with red on toe part blue on heel part cuff should be in black"
                                 className="resize-none bg-gray-50"
                                 {...field}
                                 rows={3}
