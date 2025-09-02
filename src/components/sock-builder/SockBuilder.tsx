@@ -109,18 +109,14 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         });
       } else if (result.data) {
         setGeneratedDesign(result.data.designDataUri);
-        // Optional: Show a toast, but the UI change is the main feedback
-        // toast({
-        //   title: 'Design Generated!',
-        //   description: 'Here is your new custom sock design.',
-        // });
       }
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'An unexpected error occurred. Please try again.',
-      });
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        toast({
+            variant: 'destructive',
+            title: 'Uh oh! Something went wrong.',
+            description: `An unexpected error occurred: ${errorMessage}`,
+        });
     } finally {
       setIsGenerating(false);
     }

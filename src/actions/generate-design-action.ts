@@ -23,6 +23,7 @@ export async function generateDesignAction(values: unknown) {
     return { data: result };
   } catch (error) {
     console.error('AI design generation failed:', error);
-    return { error: 'Failed to generate design. Please try again.' };
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { error: `Failed to generate design: ${errorMessage}` };
   }
 }
