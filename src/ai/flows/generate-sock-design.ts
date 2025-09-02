@@ -51,10 +51,10 @@ const generateSockDesignFlow = ai.defineFlow(
     outputSchema: GenerateSockDesignOutputSchema,
   },
   async input => {
-    const renderedPrompt = await generateSockDesignPrompt.renderText({input});
     const {media} = await ai.generate({
       model: 'googleai/imagen-4.0-fast-generate-001',
-      prompt: renderedPrompt,
+      prompt: generateSockDesignPrompt,
+      input,
     });
     if (!media) {
       throw new Error('Image generation failed to produce media.');
