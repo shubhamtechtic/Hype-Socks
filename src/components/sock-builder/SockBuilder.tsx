@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, Download, ArrowRight, Lightbulb, CheckCircle2, X, ChevronLeft } from 'lucide-react';
+import { Upload, Wand2, Loader2, Download, ArrowRight, Lightbulb, CheckCircle2, X, ChevronLeft, RotateCw, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -32,6 +32,8 @@ interface SockBuilderProps {
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [generatedDesign, setGeneratedDesign] = React.useState<string | null>(null);
+  const [isAddedToCart, setIsAddedToCart] = React.useState(false);
+
   const router = useRouter();
 
   const { toast } = useToast();
@@ -45,7 +47,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     mode: 'onChange',
   });
 
-  const { watch, setValue } = form;
+  const { watch, setValue, getValues } = form;
   const watchedParts = watch('parts');
   const watchedLogo = watch('logo');
   
@@ -79,6 +81,20 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const handleGoBack = () => {
     router.back();
   };
+  
+  const handleStartOver = () => {
+    form.reset();
+    setGeneratedDesign(null);
+    setIsAddedToCart(false);
+  }
+
+  const handleRegenerate = async () => {
+    await onSubmit(getValues());
+  }
+
+  const handleAddToCart = () => {
+    setIsAddedToCart(true);
+  }
 
   const onSubmit = async (values: SockDesignForm) => {
     setIsGenerating(true);
@@ -93,10 +109,11 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         });
       } else if (result.data) {
         setGeneratedDesign(result.data.designDataUri);
-        toast({
-          title: 'Design Generated!',
-          description: 'Your custom sock design is ready.',
-        });
+        // Optional: Show a toast, but the UI change is the main feedback
+        // toast({
+        //   title: 'Design Generated!',
+        //   description: 'Here is your new custom sock design.',
+        // });
       }
     } catch (error) {
       toast({
@@ -110,6 +127,38 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   };
   
   if (generatedDesign) {
+     if (isAddedToCart) {
+      return (
+        <div className="container mx-auto max-w-4xl px-4 text-center">
+            <Card className="bg-white p-8 shadow-xl md:p-12">
+                 <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
+                <h2 className="mt-6 text-3xl font-bold uppercase tracking-tight md:text-4xl">
+                    Added to <span className="text-primary">Cart!</span>
+                </h2>
+                <p className="mt-2 text-gray-600">Your custom sock design has been successfully added to your cart.</p>
+                <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
+                    <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
+                </div>
+                <div className="mt-8 flex justify-center gap-4">
+                    <Button 
+                        size="lg" 
+                        className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
+                        onClick={() => router.push('/')}>
+                        Continue Shopping
+                    </Button>
+                    <Button 
+                        size="lg" 
+                        variant="outline" 
+                        className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
+                        onClick={handleStartOver}>
+                        Create Another Design
+                    </Button>
+                </div>
+            </Card>
+        </div>
+      );
+     }
+
     return (
         <div className="container mx-auto max-w-4xl px-4 text-center">
             <Card className="bg-white p-8 shadow-xl md:p-12">
@@ -117,24 +166,34 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                     Your <span className="text-primary">Design</span> is Ready!
                 </h2>
                 <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
-                    <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
+                     {isGenerating ? (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-10 rounded-lg">
+                            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                            <p className="mt-4 font-semibold">Generating new design...</p>
+                        </div>
+                    ) : (
+                        <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
+                    )}
                 </div>
                 <div className="mt-8 flex justify-center gap-4">
-                    <Button asChild size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90">
-                        <a href={generatedDesign} download="custom-sock-design.png">
-                            <Download className="mr-2 h-5 w-5" />
-                            Download Design
-                        </a>
+                     <Button 
+                        size="lg" 
+                        variant="outline" 
+                        className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
+                        onClick={handleRegenerate}
+                        disabled={isGenerating}
+                     >
+                        <RotateCw className="mr-2 h-5 w-5" />
+                        Regenerate Design
                     </Button>
                     <Button 
                         size="lg" 
-                        variant="outline" 
-                        className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary/5"
-                        onClick={() => {
-                            form.reset();
-                            setGeneratedDesign(null);
-                        }}>
-                        Start Over
+                        className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
+                        onClick={handleAddToCart}
+                        disabled={isGenerating}
+                    >
+                        <ShoppingCart className="mr-2 h-5 w-5" />
+                        Add to Cart
                     </Button>
                 </div>
             </Card>
@@ -274,6 +333,9 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
             <div className="flex justify-center items-center gap-4 pt-4">
                 <Button variant="outline" size="lg" className="rounded-full px-8 font-bold" onClick={handleGoBack}>
                     <ChevronLeft className="mr-2 h-5 w-5" /> Back
+                </Button>
+                <Button variant="ghost" size="lg" className="rounded-full px-8 font-bold" onClick={handleStartOver}>
+                    Start Over
                 </Button>
                 <Button type="submit" size="lg" className="rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
                     {isGenerating ? (
