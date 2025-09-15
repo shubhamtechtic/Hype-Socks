@@ -25,15 +25,97 @@ interface SockBuilderProps {
 
 const getImagePaths = (sockLength: string, sockImage: string) => {
     const lowerSockLength = sockLength.toLowerCase();
-  
-    if (lowerSockLength.includes('crew')) {
+    
+    // Handle specific sub-styles first
+    if (lowerSockLength.includes('2.0 - crew')) {
         return [
-            '/Zip/Crew-RIGHT-Sock.png',
-            '/Zip/Crew-LEFT-Sock.png',
-            '/Zip/Crew-FRONT-Sock.png',
-            '/Zip/Crew-BACK-Sock.png',
+            '/Zip/Crew2.0-RIGHT-Sock.png',
+            '/Zip/Crew2.0-LEFT-Sock.png',
+            '/Zip/Crew2.0-FRONT-Sock.png',
+            '/Zip/Crew2.0-BACK-Sock.png',
         ];
-    } else if (lowerSockLength.includes('quarter')) {
+    } else if (lowerSockLength.includes('elite - crew')) {
+        return [
+            '/Zip/CrewEliteRIGHTSIDE-Sock.png',
+            '/Zip/CrewEliteLEFTSIDE-Sock.png',
+            '/Zip/CrewEliteFRONT-Sock.png',
+            '/Zip/CrewEliteBACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('havoc - crew')) {
+        return [
+            '/Zip/Crew-HAVOC-RIGHT-Sock.png',
+            '/Zip/Crew-HAVOC-LEFT-Sock.png',
+            '/Zip/Crew-HAVOC-FRONT-Sock.png',
+            '/Zip/Crew-HAVOC-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('polaris - crew')) {
+        return [
+            '/Zip/Crew-POLARIS-RIGHT-Sock.png',
+            '/Zip/Crew-POLARIS-LEFT-Sock.png',
+            '/Zip/Crew-POLARIS-FRONT-Sock.png',
+            '/Zip/Crew-POLARIS-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('easton - knee high')) {
+        return [
+            '/Zip/KneeHigh-Easton-RIGHT-Sock.png',
+            '/Zip/KneeHigh-Easton-LEFT-Sock.png',
+            '/Zip/KneeHigh-Easton-FRONT-Sock.png',
+            '/Zip/KneeHigh-Easton-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('havoc - knee high')) {
+        return [
+            '/Zip/KneeHigh-Havok-RIGHT-Sock.png',
+            '/Zip/KneeHigh-Havok-LEFT-Sock.png',
+            '/Zip/KneeHigh-Havok-FRONT-Sock.png',
+            '/Zip/KneeHigh-Havok-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('polaris - knee high')) {
+        return [
+            '/Zip/KneeHigh-PolarisRIGHT-Sock.png',
+            '/Zip/KneeHigh-PolarisLEFT-Sock.png',
+            '/Zip/KneeHigh-PolarisFRONT-Sock.png',
+            '/Zip/KneeHigh-PolarisBACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('stellaris - knee high')) {
+        return [
+            '/Zip/KneeHigh-Stellaris-RIGHT-Sock.png',
+            '/Zip/KneeHigh-Stellaris-LEFT-Sock.png',
+            '/Zip/KneeHigh-Stellaris-FRONT-Sock.png',
+            '/Zip/KneeHigh-Stellaris-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('stirrup - knee high')) {
+        return [
+            '/Zip/CS-RIGHT-Sock.png',
+            '/Zip/CS-LEFT-Sock.png',
+            '/Zip/CS-FRONT-Sock.png',
+            '/Zip/CS-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('2 stripes - over the knee')) {
+        return [
+            '/Zip/European2Rings-RIGHT-Sock.png',
+            '/Zip/European2Rings-LEFT-Sock.png',
+            '/Zip/European2Rings-FRONT-Sock.png',
+            '/Zip/European2Rings-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('3 stripes - over the knee')) {
+        return [
+            '/Zip/European3Rings-RIGHT-Sock.png',
+            '/Zip/European3Rings-LEFT-Sock.png',
+            '/Zip/European3Rings-FRONT-Sock.png',
+            '/Zip/European3Rings-BACK-Sock.png',
+        ];
+    } else if (lowerSockLength.includes('solid - over the knee')) {
+        return [
+            '/Zip/Solid-RIGHT-Sock.png',
+            '/Zip/Solid-LEFT-Sock.png',
+            '/Zip/Solid-FRONT-Sock.png',
+            '/Zip/Solid-BACK-Sock.png',
+        ];
+    }
+
+
+    // Handle generic categories
+    if (lowerSockLength.includes('quarter')) {
       return [
         '/Zip/Heel-RIGHT-Sock.png',
         '/Zip/Heel-LEFT-Sock.png',
@@ -47,11 +129,19 @@ const getImagePaths = (sockLength: string, sockImage: string) => {
         '/Zip/Ankle-FRONT-Sock.png',
         '/Zip/Ankle-BACK-Sock.png',
       ];
+    } else if (lowerSockLength.includes('crew')) { // Generic crew as a fallback
+        return [
+            '/Zip/Crew2.0-RIGHT-Sock.png',
+            '/Zip/Crew2.0-LEFT-Sock.png',
+            '/Zip/Crew2.0-FRONT-Sock.png',
+            '/Zip/Crew2.0-BACK-Sock.png',
+        ];
     }
     
-    // For other types like 'Knee High' or 'Over The Knee', use the single image passed in
+    // For other types like 'Knee High' or 'Over The Knee' that don't have 4 views, use the single image passed in
     return [sockImage];
 };
+
 
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
@@ -421,5 +511,3 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
-
-    
