@@ -37,11 +37,34 @@ const getImagePaths = (sockLength: string, sockImage: string) => {
     }
 
     if (prefix) {
+        if (prefix === 'Crew') {
+             // Specific handling for Crew styles if needed, for now use a generic approach
+             // This can be expanded if different crew styles have different image name patterns.
+             // For now, let's assume a generic pattern doesn't fit and we fall back to sockImage
+             // or use a specific known pattern if one exists.
+             // Based on the user feedback, a single image seems to be passed.
+             // Let's try to construct a generic path for the main crew types.
+             const crewStyle = sockLength.split(' - ')[0].replace(' ', ''); // e.g. "2.0", "Elite"
+             // This is still complex. Let's simplify based on what we know for sure.
+             // Let's go back to a more reliable method based on the main categories.
+             return [
+                 `/Zip/${prefix}-RIGHT-Sock.png`,
+                 `/Zip/${prefix}-LEFT-Sock.png`,
+                 `/Zip/${prefix}-FRONT-Sock.png`,
+                 `/Zip/${prefix}-BACK-Sock.png`,
+             ].filter(src => {
+                 // A simple check to see if the image might exist. In a real app, you'd have a manifest.
+                 // For now, let's just return the paths. We need to ensure these files exist.
+                 // The user provided screenshots showing these files exist.
+                 return true;
+             });
+
+        }
         return [
-            `/Zip/${prefix}-1.png`,
-            `/Zip/${prefix}-2.png`,
-            `/Zip/${prefix}-3.png`,
-            `/Zip/${prefix}-4.png`,
+            `/Zip/${prefix}-RIGHT-Sock.png`,
+            `/Zip/${prefix}-LEFT-Sock.png`,
+            `/Zip/${prefix}-FRONT-Sock.png`,
+            `/Zip/${prefix}-BACK-Sock.png`,
         ];
     }
     return [sockImage];
@@ -394,6 +417,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                                 fill
                                                 className="object-contain"
                                                 data-ai-hint="custom sock"
+                                                unoptimized
                                             />
                                         </div>
                                     </CarouselItem>
@@ -420,5 +444,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
+
+    
 
     
