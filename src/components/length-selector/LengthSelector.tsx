@@ -39,9 +39,9 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
         { name: 'Stirrup - Knee High', icon: '/image 7-6.png' },
     ],
     'Over The Knee': [
-        { name: '2 Stripes - Over The Knee', icon: '/image 8-1.png' },
-        { name: '3 Stripes - Over The Knee', icon: '/image 8-2.png' },
-        { name: 'Solid - Over The Knee', icon: '/image 8-3.png' },
+        { name: '2 Stripes - Over The Knee', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/European2Rings-RIGHT-Sock.png' },
+        { name: '3 Stripes - Over The Knee', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/European3Rings-RIGHT-Sock.png' },
+        { name: 'Solid - Over The Knee', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Solid-RIGHT-Sock-1.png' },
     ]
 };
 
@@ -161,9 +161,10 @@ export function LengthSelector() {
                 <div className="flex flex-col items-center justify-center gap-8">
                     <div className="flex w-full items-center justify-center">
                         <div
+                            onClick={handleContinue}
                             className={cn(
                             'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all w-full max-w-sm',
-                            'border-primary/30 bg-primary/5'
+                            'border-primary/30 bg-primary/5 hover:border-primary'
                             )}
                         >
                              <div className="relative mx-auto h-80 w-full md:h-96">
@@ -177,7 +178,7 @@ export function LengthSelector() {
                             </div>
                             <div className="mt-2 flex items-center justify-between">
                                 <p className="text-lg font-semibold">{selectedSub} Length</p>
-                                <Button size="icon" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
+                                <Button size="icon" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90" >
                                     <ArrowRight className="h-5 w-5" />
                                 </Button>
                             </div>
