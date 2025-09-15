@@ -3,6 +3,7 @@
 
 import { sockDesignSchema } from '@/lib/types';
 import { dataURIToBlob } from '@/lib/utils';
+import { headers } from 'next/headers';
 
 export async function generateDesignAction(values: unknown) {
   const validatedFields = sockDesignSchema.safeParse(values);
@@ -17,10 +18,17 @@ export async function generateDesignAction(values: unknown) {
     const formData = new FormData();
     const logoBlob = dataURIToBlob(logo);
     
+    // Construct absolute URL for the sock image
+    const headersList = headers();
+    const host = headersList.get('host') || 'localhost:9002';
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    const absoluteSockImageUrl = `${protocol}://${host}${sockImage}`;
+    
     // Fetch the sock image and convert it to a blob
-    const sockImageRes = await fetch(sockImage, { cache: 'no-store' });
+    const sockImageRes = await fetch(absoluteSockImageUrl, { cache: 'no-store' });
+
     if (!sockImageRes.ok) {
-      throw new Error(`Failed to fetch sock image from: ${sockImage}`);
+      throw new Error(`Failed to fetch sock image from: ${absoluteSockImageUrl} (status: ${sockImageRes.status})`);
     }
     const sockImageBlob = await sockImageRes.blob();
 
@@ -31,7 +39,6 @@ export async function generateDesignAction(values: unknown) {
     formData.append('secondary_color', secondaryColor);
     formData.append('accent_color', accentColor);
 
-    // IMPORTANT: Replace with your actual API endpoint
     const apiEndpoint = process.env.API_ENDPOINT || 'http://127.0.0.1:8000/api/v1/designs-v2/generate';
     
     const response = await fetch(apiEndpoint, {
