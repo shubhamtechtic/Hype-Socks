@@ -27,25 +27,27 @@ interface SockBuilderProps {
 const getImagePaths = (sockLength: string, sockImage: string) => {
     const lowerSockLength = sockLength.toLowerCase();
     let prefix = '';
-
+  
     if (lowerSockLength.includes('ankle')) {
-        prefix = 'Ankle';
+      prefix = 'Ankle';
     } else if (lowerSockLength.includes('quarter')) {
-        prefix = 'Heel';
+      prefix = 'Heel';
     } else if (lowerSockLength.includes('crew')) {
-        prefix = 'Crew';
+      prefix = 'Crew';
     }
-
+  
     if (prefix) {
-        return [
-            `/Zip/${prefix}-RIGHT-Sock.png`,
-            `/Zip/${prefix}-LEFT-Sock.png`,
-            `/Zip/${prefix}-FRONT-Sock.png`,
-            `/Zip/${prefix}-BACK-Sock.png`,
-        ];
+      return [
+        `/Zip/${prefix}-RIGHT-Sock.png`,
+        `/Zip/${prefix}-LEFT-Sock.png`,
+        `/Zip/${prefix}-FRONT-Sock.png`,
+        `/Zip/${prefix}-BACK-Sock.png`,
+      ];
     }
+    
+    // For other types like 'Knee High' or 'Over The Knee', use the single image passed in
     return [sockImage];
-}
+  };
 
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
@@ -325,37 +327,14 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             </Accordion>
                         </div>
                     </div>
-                    {generatedDesign ? (
-                        <div className="flex justify-center gap-4">
-                            <Button 
-                                size="lg" 
-                                variant="outline" 
-                                className="w-full rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
-                                onClick={handleRegenerate}
-                                disabled={isGenerating}
-                            >
-                                <RotateCw className="mr-2 h-5 w-5" />
-                                Regenerate
-                            </Button>
-                            <Button 
-                                size="lg" 
-                                className="w-full rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
-                                onClick={handleAddToCart}
-                                disabled={isGenerating}
-                            >
-                                <ShoppingCart className="mr-2 h-5 w-5" />
-                                Add to Cart
-                            </Button>
-                        </div>
-                    ) : (
-                        <Button type="submit" size="lg" className="w-full rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
-                            {isGenerating ? (
-                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Art Work...</>
-                            ) : (
-                                <><Wand2 className="mr-2 h-4 w-4" /> Generate Art Work</>
-                            )}
-                        </Button>
-                    )}
+
+                    <Button type="submit" size="lg" className="w-full rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
+                        {isGenerating ? (
+                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Art Work...</>
+                        ) : (
+                            <><Wand2 className="mr-2 h-4 w-4" /> Generate Art Work</>
+                        )}
+                    </Button>
                 </div>
 
 
@@ -370,9 +349,32 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             </div>
                         )}
                         {generatedDesign ? (
-                            <div className="relative w-full aspect-square">
-                                <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" />
-                            </div>
+                            <>
+                                <div className="relative w-full aspect-square">
+                                    <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" />
+                                </div>
+                                <div className="mt-8 flex justify-center gap-4">
+                                     <Button 
+                                        size="lg" 
+                                        variant="outline" 
+                                        className="w-full rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
+                                        onClick={handleRegenerate}
+                                        disabled={isGenerating}
+                                    >
+                                        <RotateCw className="mr-2 h-5 w-5" />
+                                        Regenerate
+                                    </Button>
+                                    <Button 
+                                        size="lg" 
+                                        className="w-full rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
+                                        onClick={handleAddToCart}
+                                        disabled={isGenerating}
+                                    >
+                                        <ShoppingCart className="mr-2 h-5 w-5" />
+                                        Add to Cart
+                                    </Button>
+                                </div>
+                            </>
                         ) : (
                             <Carousel setApi={setApi} className="w-full">
                                 <CarouselContent>
