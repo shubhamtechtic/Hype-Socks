@@ -26,13 +26,13 @@ interface SockBuilderProps {
 const getImagePaths = (sockLength: string, sockImage: string) => {
     const lowerSockLength = sockLength.toLowerCase();
   
-    if (lowerSockLength.includes('ankle')) {
-      return [
-        '/Zip/Ankle-RIGHT-Sock.png',
-        '/Zip/Ankle-LEFT-Sock.png',
-        '/Zip/Ankle-FRONT-Sock.png',
-        '/Zip/Ankle-BACK-Sock.png',
-      ];
+    if (lowerSockLength.includes('crew')) {
+        return [
+            '/Zip/Crew-RIGHT-Sock.png',
+            '/Zip/Crew-LEFT-Sock.png',
+            '/Zip/Crew-FRONT-Sock.png',
+            '/Zip/Crew-BACK-Sock.png',
+        ];
     } else if (lowerSockLength.includes('quarter')) {
       return [
         '/Zip/Heel-RIGHT-Sock.png',
@@ -40,18 +40,18 @@ const getImagePaths = (sockLength: string, sockImage: string) => {
         '/Zip/Heel-FRONT-Sock.png',
         '/Zip/Heel-BACK-Sock.png',
       ];
-    } else if (lowerSockLength.includes('crew')) {
-        return [
-            '/Zip/Crew-RIGHT-Sock.png',
-            '/Zip/Crew-LEFT-Sock.png',
-            '/Zip/Crew-FRONT-Sock.png',
-            '/Zip/Crew-BACK-Sock.png',
-        ];
+    } else if (lowerSockLength.includes('ankle')) {
+      return [
+        '/Zip/Ankle-RIGHT-Sock.png',
+        '/Zip/Ankle-LEFT-Sock.png',
+        '/Zip/Ankle-FRONT-Sock.png',
+        '/Zip/Ankle-BACK-Sock.png',
+      ];
     }
     
     // For other types like 'Knee High' or 'Over The Knee', use the single image passed in
     return [sockImage];
-  };
+};
 
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
@@ -421,3 +421,5 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
+
+    
