@@ -36,7 +36,7 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
         { name: 'Havoc - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-Havok-RIGHT-Sock.png' },
         { name: 'Polaris - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-PolarisRIGHT-Sock.png' },
         { name: 'Stellaris - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-Stellaris-RIGHT-Sock-1.png' },
-        { name: 'Stirrup - Knee High', icon: '/image 7-6.png' },
+        { name: 'Stirrup - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/CS-RIGHT-Sock.png' },
     ],
     'Over The Knee': [
         { name: '2 Stripes - Over The Knee', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/European2Rings-RIGHT-Sock.png' },
