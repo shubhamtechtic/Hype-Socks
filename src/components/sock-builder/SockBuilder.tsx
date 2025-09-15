@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft, Lightbulb, Download, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightbulb, Download } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
@@ -24,13 +24,15 @@ interface SockBuilderProps {
     sockImage: string;
 }
 
-const getImagePaths = (sockLength: string) => {
+const getImagePaths = (sockLength: string, sockImage: string) => {
+    const lowerSockLength = sockLength.toLowerCase();
     let prefix = '';
-    if (sockLength.toLowerCase().includes('ankle')) {
+
+    if (lowerSockLength.includes('ankle')) {
         prefix = 'Ankle';
-    } else if (sockLength.toLowerCase().includes('quarter')) {
+    } else if (lowerSockLength.includes('quarter')) {
         prefix = 'Heel';
-    } else if (sockLength.toLowerCase().includes('crew')) {
+    } else if (lowerSockLength.includes('crew')) {
         prefix = 'Crew';
     }
 
@@ -42,7 +44,7 @@ const getImagePaths = (sockLength: string) => {
             `/Zip/${prefix}-4.png`,
         ];
     }
-    return [sockLength];
+    return [sockImage];
 }
 
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
@@ -54,7 +56,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [count, setCount] = React.useState(0)
 
   const router = useRouter();
-  const previewImages = React.useMemo(() => getImagePaths(sockLength), [sockLength]);
+  const previewImages = React.useMemo(() => getImagePaths(sockLength, sockImage), [sockLength, sockImage]);
 
 
   React.useEffect(() => {
@@ -397,13 +399,15 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                                <CarouselPrevious className="static -translate-y-0"/>
-                                <div className="py-2 text-center text-sm text-muted-foreground">
-                                    {current} / {count}
+                            {previewImages.length > 1 && (
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                    <CarouselPrevious className="static -translate-y-0"/>
+                                    <div className="py-2 text-center text-sm text-muted-foreground">
+                                        {current} / {count}
+                                    </div>
+                                    <CarouselNext className="static -translate-y-0"/>
                                 </div>
-                                <CarouselNext className="static -translate-y-0"/>
-                            </div>
+                            )}
                         </Carousel>
                         <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
                             <Download className="h-5 w-5 text-gray-600"/>
@@ -416,3 +420,5 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
+
+    
