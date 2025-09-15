@@ -54,7 +54,13 @@ export function LengthSelector() {
     setSelectedLength(lengthName);
     if (!subCategories[lengthName] || subCategories[lengthName].length <= 1) {
         setSelectedSub(lengthName);
+        router.push(`/build?length=${encodeURIComponent(lengthName)}`);
     }
+  };
+
+  const handleSubSelect = (subName: string) => {
+    setSelectedSub(subName);
+    router.push(`/build?length=${encodeURIComponent(subName)}`);
   };
 
   const handleContinue = () => {
@@ -129,7 +135,7 @@ export function LengthSelector() {
                         {currentSubCategories.map((subSock) => (
                         <div
                             key={subSock.name}
-                            onClick={() => setSelectedSub(subSock.name)}
+                            onClick={() => handleSubSelect(subSock.name)}
                             className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
                         >
                             <div className="relative mx-auto h-48 w-full md:h-64">
