@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ArrowRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -17,21 +17,58 @@ const sockLengths = [
   { name: 'Over The Knee', icon: '/image 8.png' },
 ];
 
+const subCategories: Record<string, { name: string; icon: string }[]> = {
+    'Ankle': [
+      { name: 'Ankle', icon: '/image 4.png' },
+    ],
+    'Quarter': [
+      { name: 'Quarter', icon: '/image 5.png' },
+    ],
+    'Crew': [
+        { name: '2.0 - Crew', icon: '/image 6-1.png' },
+        { name: 'Elite - Crew', icon: '/image 6-2.png' },
+        { name: 'Havoc - Crew', icon: '/image 6-3.png' },
+        { name: 'Polaris - Crew', icon: '/image 6-4.png' },
+    ]
+};
+
 export function LengthSelector() {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selectedLength, setSelectedLength] = useState<string | null>(null);
+  const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const router = useRouter();
 
+  const handleLengthSelect = (lengthName: string) => {
+    setSelectedLength(lengthName);
+    if (!subCategories[lengthName] || subCategories[lengthName].length <= 1) {
+        setSelectedSub(lengthName);
+    }
+  };
+
   const handleContinue = () => {
-    if (selected) {
-      router.push(`/build?length=${encodeURIComponent(selected)}`);
+    if (selectedSub) {
+      router.push(`/build?length=${encodeURIComponent(selectedSub)}`);
     }
   };
   
   const handleGoBack = () => {
-    setSelected(null);
+    if (selectedSub && subCategories[selectedLength!] && subCategories[selectedLength!].length > 1) {
+      setSelectedSub(null);
+    } else {
+      setSelectedLength(null);
+      setSelectedSub(null);
+    }
   };
 
-  const selectedSock = sockLengths.find((s) => s.name === selected);
+  const selectedSock = sockLengths.find((s) => s.name === selectedLength);
+  const currentSubCategories = selectedLength ? subCategories[selectedLength] : [];
+
+  const getGridCols = (count: number) => {
+    if (count === 1) return 'grid-cols-1';
+    if (count === 2) return 'grid-cols-1 md:grid-cols-2';
+    if (count === 3) return 'grid-cols-1 md:grid-cols-3';
+    if (count === 4) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+    return 'grid-cols-1 md:grid-cols-3 lg:grid-cols-5';
+  }
 
   return (
     <div className="container mx-auto max-w-7xl px-4">
@@ -46,12 +83,12 @@ export function LengthSelector() {
         </div>
 
         <div className="mt-10">
-          {!selected ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {!selectedLength ? (
+            <div className={`grid ${getGridCols(sockLengths.length)} gap-6`}>
               {sockLengths.map((sock) => (
                 <div
                   key={sock.name}
-                  onClick={() => setSelected(sock.name)}
+                  onClick={() => handleLengthSelect(sock.name)}
                   className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
                 >
                   <div className="relative mx-auto h-48 w-full md:h-64">
@@ -68,46 +105,79 @@ export function LengthSelector() {
               ))}
             </div>
           ) : (
-            selectedSock && (
-              <div className="flex flex-col items-center justify-center gap-8">
-                <div className="flex w-full items-center justify-center">
-                  <div
-                    className={cn(
-                      'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all w-full max-w-sm',
-                      'border-primary/30 bg-primary/5'
-                    )}
-                  >
-                    <div className="relative mx-auto h-80 w-full md:h-96">
-                      <Image
-                        src={selectedSock.icon}
-                        alt={`${selectedSock.name} sock`}
-                        fill
-                        className="object-contain animate-tilt-shaking"
-                        data-ai-hint={`${selectedSock.name.toLowerCase()} sock`}
-                      />
+            <div>
+              {currentSubCategories && currentSubCategories.length > 1 && !selectedSub ? (
+                 <div className="flex flex-col items-center">
+                    <h2 className="text-2xl font-bold uppercase tracking-tight md:text-3xl mb-6">
+                        Choose Your <span className="text-primary">{selectedLength} Style</span>
+                    </h2>
+                    <div className={`grid ${getGridCols(currentSubCategories.length)} gap-6 w-full`}>
+                        {currentSubCategories.map((subSock) => (
+                        <div
+                            key={subSock.name}
+                            onClick={() => setSelectedSub(subSock.name)}
+                            className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
+                        >
+                            <div className="relative mx-auto h-48 w-full md:h-64">
+                                <Image
+                                    src={subSock.icon}
+                                    alt={`${subSock.name} sock`}
+                                    fill
+                                    className="object-contain animate-tilt-shaking"
+                                    data-ai-hint={`${subSock.name.toLowerCase()} sock`}
+                                />
+                            </div>
+                            <p className="mt-2 text-sm font-semibold">{subSock.name}</p>
+                        </div>
+                        ))}
                     </div>
-                    <div className="mt-2 flex items-center justify-between">
-                        <p className="text-lg font-semibold">{selectedSock.name} Length</p>
-                        <Button size="icon" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
-                            <ArrowRight className="h-5 w-5" />
+                    <div className="mt-8 flex justify-center gap-4">
+                        <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
+                            <ChevronLeft className="mr-2 h-5 w-5" /> Back
                         </Button>
                     </div>
-                  </div>
+                 </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-8">
+                    <div className="flex w-full items-center justify-center">
+                        <div
+                            className={cn(
+                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all w-full max-w-sm',
+                            'border-primary/30 bg-primary/5'
+                            )}
+                        >
+                             <div className="relative mx-auto h-80 w-full md:h-96">
+                                <Image
+                                    src={currentSubCategories.find(s => s.name === selectedSub)?.icon || selectedSock!.icon}
+                                    alt={`${selectedSub} sock`}
+                                    fill
+                                    className="object-contain animate-tilt-shaking"
+                                    data-ai-hint={`${selectedSub?.toLowerCase()} sock`}
+                                />
+                            </div>
+                            <div className="mt-2 flex items-center justify-between">
+                                <p className="text-lg font-semibold">{selectedSub} Length</p>
+                                <Button size="icon" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleContinue}>
+                                    <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                     <div className="flex justify-center gap-4">
+                        <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
+                            <ChevronLeft className="mr-2 h-5 w-5" /> Back
+                        </Button>
+                    </div>
                 </div>
-                <div className="flex justify-center gap-4">
-                  <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
-                    <ChevronLeft className="mr-2 h-5 w-5" /> Back
-                  </Button>
-                </div>
-              </div>
-            )
+              )}
+            </div>
           )}
         </div>
         
-        {!selected && (
+        {(!selectedLength || (currentSubCategories && currentSubCategories.length > 1 && !selectedSub)) && (
             <div className="mt-12 flex justify-center">
-                <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue} disabled={!selected}>
-                    Continue <ChevronRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue} disabled={!selectedSub}>
+                    Continue
                 </Button>
             </div>
         )}
