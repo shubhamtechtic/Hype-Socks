@@ -10,11 +10,21 @@ export const metadata: Metadata = {
 };
 
 const sockImages: Record<string, string> = {
-    'Ankle': '/image 4.png',
-    'Quarter': '/image 5.png',
-    'Crew': '/image 6.png',
-    'Knee High': '/image 7.png',
-    'Over The Knee': '/image 8.png',
+    'Ankle': '/Zip/ankle.png',
+    'Quarter': '/Zip/heel.png',
+    '2.0 - Crew': '/Zip/crew.png',
+    'Elite - Crew': '/Zip/crew.png',
+    'Havoc - Crew': '/Zip/crew.png',
+    'Polaris - Crew': '/Zip/crew.png',
+    '2.0 - Knee High': '/image 7.png',
+    'Easton - Knee High': '/image 7.png',
+    'Havoc - Knee High': '/image 7.png',
+    'Polaris - Knee High': '/image 7.png',
+    'Stellaris - Knee High': '/image 7.png',
+    'Stirrup - Knee High': '/image 7.png',
+    '2 Stripes - Over The Knee': '/image 8.png',
+    '3 Stripes - Over The Knee': '/image 8.png',
+    'Solid - Over The Knee': '/image 8.png',
   };
   
 
