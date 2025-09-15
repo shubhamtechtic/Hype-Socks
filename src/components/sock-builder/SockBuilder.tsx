@@ -45,6 +45,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
+  const watchedPart = watch('parts');
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -240,9 +241,30 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                          <div className="mt-4 rounded-lg bg-yellow-50 border border-yellow-200 p-3 flex items-start gap-3">
                             <Lightbulb className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                             <p className="text-xs text-yellow-800">
-                                <span className='font-semibold'>Tip:</span> For best results, use a high-contrast logo with transparent background
+                                <span className='font-semibold'>Tip:</span> For best results, use a high-contrast logo with a transparent background.
                             </p>
                         </div>
+                    </div>
+
+                    <div className="space-y-6">
+                        <h2 className="text-xl font-semibold">Logo Placement</h2>
+                        <p className="text-sm text-gray-500">Select where you want your logo to appear on the sock.</p>
+                        <FormField
+                            control={form.control}
+                            name="parts"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormControl>
+                                    <PlacementSelector
+                                        selectedPart={field.value as SockPart}
+                                        onPartClick={(part) => field.onChange(part)}
+                                        sockImage={sockImage}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                      
                     <div>
@@ -343,3 +365,5 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
+
+    
