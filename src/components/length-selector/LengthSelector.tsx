@@ -25,10 +25,10 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
       { name: 'Quarter', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Ankle-RIGHT-Sock.png' },
     ],
     'Crew': [
-        { name: '2.0 - Crew', icon: '/image 6-1.png' },
-        { name: 'Elite - Crew', icon: '/image 6-2.png' },
-        { name: 'Havoc - Crew', icon: '/image 6-3.png' },
-        { name: 'Polaris - Crew', icon: '/image 6-4.png' },
+        { name: '2.0 - Crew', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Crew2.0-RIGHT-Sock.png' },
+        { name: 'Elite - Crew', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/CrewEliteRIGHTSIDE-Sock.png' },
+        { name: 'Havoc - Crew', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Crew-HAVOC-RIGHT-Sock.png' },
+        { name: 'Polaris - Crew', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Crew-POLARIS-RIGHT-Sock-1.png' },
     ],
     'Knee High': [
         { name: '2.0 - Knee High', icon: '/image 7-1.png' },
@@ -58,12 +58,6 @@ export function LengthSelector() {
   const handleSubSelect = (subName: string) => {
     setSelectedSub(subName);
     router.push(`/build?length=${encodeURIComponent(subName)}`);
-  };
-
-  const handleContinue = () => {
-    if (selectedSub) {
-      router.push(`/build?length=${encodeURIComponent(selectedSub)}`);
-    }
   };
   
   const handleGoBack = () => {
@@ -152,18 +146,8 @@ export function LengthSelector() {
             </div>
           )}
         </div>
-        
-        {(!selectedLength || (currentSubCategories && currentSubCategories.length > 1 && !selectedSub)) && (
-            <div className="mt-12 flex justify-center">
-                <Button size="lg" className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90" onClick={handleContinue} disabled={!selectedSub}>
-                    Continue
-                </Button>
-            </div>
-        )}
 
       </Card>
     </div>
   );
 }
-
-    
