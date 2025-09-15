@@ -12,23 +12,64 @@ import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft, Lightbulb, Download } from 'lucide-react';
+import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft, Lightbulb, Download, ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 
 interface SockBuilderProps {
     sockLength: string;
     sockImage: string;
 }
 
+const getImagePaths = (sockLength: string) => {
+    let prefix = '';
+    if (sockLength.toLowerCase().includes('ankle')) {
+        prefix = 'Ankle';
+    } else if (sockLength.toLowerCase().includes('quarter')) {
+        prefix = 'Heel';
+    } else if (sockLength.toLowerCase().includes('crew')) {
+        prefix = 'Crew';
+    }
+
+    if (prefix) {
+        return [
+            `/Zip/${prefix}-1.png`,
+            `/Zip/${prefix}-2.png`,
+            `/Zip/${prefix}-3.png`,
+            `/Zip/${prefix}-4.png`,
+        ];
+    }
+    return [sockLength];
+}
+
 export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [generatedDesign, setGeneratedDesign] = React.useState<string | null>(null);
   const [isAddedToCart, setIsAddedToCart] = React.useState(false);
+  const [api, setApi] = React.useState<CarouselApi>()
+  const [current, setCurrent] = React.useState(0)
+  const [count, setCount] = React.useState(0)
 
   const router = useRouter();
+  const previewImages = React.useMemo(() => getImagePaths(sockLength), [sockLength]);
+
+
+  React.useEffect(() => {
+    if (!api) {
+      return
+    }
+ 
+    setCount(api.scrollSnapList().length)
+    setCurrent(api.selectedScrollSnap() + 1)
+ 
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1)
+    })
+  }, [api])
+
 
   const { toast } = useToast();
   const form = useForm<SockDesignForm>({
@@ -45,7 +86,6 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
-  const watchedPart = watch('parts');
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -69,10 +109,6 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const handleRemoveLogo = () => {
     setValue('logo', '', { shouldValidate: true });
   }
-  
-  const handleGoBack = () => {
-    router.back();
-  };
   
   const handleStartOver = () => {
     form.reset();
@@ -345,18 +381,33 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                 <div className="sticky top-24">
                     <h2 className="text-xl font-semibold mb-4">Preview</h2>
                     <Card className="bg-gray-50 p-6 md:p-8 shadow-inner border">
-                         <div className="relative w-full aspect-square">
-                            <Image 
-                                src={sockImage} 
-                                alt="Sock Preview" 
-                                fill
-                                className="object-contain animate-tilt-shaking"
-                                data-ai-hint="custom sock"
-                            />
-                            <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
-                                <Download className="h-5 w-5 text-gray-600"/>
-                            </Button>
-                        </div>
+                        <Carousel setApi={setApi} className="w-full">
+                            <CarouselContent>
+                                {previewImages.map((src, index) => (
+                                    <CarouselItem key={index}>
+                                        <div className="relative w-full aspect-square">
+                                            <Image 
+                                                src={src}
+                                                alt={`Sock Preview ${index + 1}`}
+                                                fill
+                                                className="object-contain"
+                                                data-ai-hint="custom sock"
+                                            />
+                                        </div>
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                <CarouselPrevious className="static -translate-y-0"/>
+                                <div className="py-2 text-center text-sm text-muted-foreground">
+                                    {current} / {count}
+                                </div>
+                                <CarouselNext className="static -translate-y-0"/>
+                            </div>
+                        </Carousel>
+                        <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
+                            <Download className="h-5 w-5 text-gray-600"/>
+                        </Button>
                     </Card>
                 </div>
             </div>
@@ -365,5 +416,3 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
-
-    
