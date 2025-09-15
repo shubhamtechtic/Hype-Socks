@@ -16,7 +16,6 @@ import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightb
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 
 interface SockBuilderProps {
@@ -95,14 +94,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
-  const watchedPrimaryColor = watch('primaryColor');
-  const watchedSecondaryColor = watch('secondaryColor');
-  const watchedAccentColor = watch('accentColor');
 
-  const getColorHex = (colorName: string) => {
-    return colors.find(c => c.name === colorName)?.hex ?? '#FFFFFF';
-  }
-  
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -198,11 +190,15 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     );
   }
 
-  const ColorIndicator = ({ hex }: { hex: string }) => (
-    <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: hex }} />
-    </div>
-  );
+  const ColorIndicator = ({ colorName }: { colorName: string }) => {
+    const colorHex = colors.find(c => c.name === colorName)?.hex ?? '#FFFFFF';
+    return (
+        <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: colorHex }} />
+            <span className="text-sm">{colorName}</span>
+        </div>
+    );
+  };
 
   return (
     <div className="container mx-auto max-w-7xl px-4">
@@ -283,81 +279,52 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                      
                     <div>
                         <h2 className="text-xl font-semibold">Choose Colors</h2>
-                        <div className="mt-4 space-y-2">
-                            <Accordion type="single" collapsible defaultValue='item-1' className="w-full">
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
-                                        <div className='flex items-center gap-3'>
-                                            <ColorIndicator hex={getColorHex(watchedPrimaryColor)} />
-                                            <span>Primary Color</span>
-                                        </div>
-                                    </AccordionTrigger>
-                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
-                                         <FormField
-                                            control={form.control}
-                                            name="primaryColor"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <ColorPicker
-                                                        description="Choose a color for the base of the sock."
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    />
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                        <div className="mt-4 space-y-6">
+                            <FormField
+                                control={form.control}
+                                name="primaryColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Primary Color"
+                                            description="Choose a color for the base of the sock."
+                                            value={field.value}
+                                            onChange={field.onChange}
                                         />
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-2">
-                                <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
-                                        <div className='flex items-center gap-3'>
-                                            <ColorIndicator hex={getColorHex(watchedSecondaryColor)} />
-                                            <span>Secondary Color</span>
-                                        </div>
-                                    </AccordionTrigger>
-                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
-                                        <FormField
-                                            control={form.control}
-                                            name="secondaryColor"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <ColorPicker
-                                                        description="Choose a color for secondary elements."
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    />
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="secondaryColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Secondary Color"
+                                            description="Choose a color for secondary elements."
+                                            value={field.value}
+                                            onChange={field.onChange}
                                         />
-                                    </AccordionContent>
-                                </AccordionItem>
-                                 <AccordionItem value="item-3">
-                                 <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
-                                        <div className='flex items-center gap-3'>
-                                            <ColorIndicator hex={getColorHex(watchedAccentColor)} />
-                                            <span>Accent Color</span>
-                                        </div>
-                                    </AccordionTrigger>
-                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
-                                         <FormField
-                                            control={form.control}
-                                            name="accentColor"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <ColorPicker
-                                                        description="Choose a color for accents and highlights."
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    />
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="accentColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Accent Color"
+                                            description="Choose a color for accents and highlights."
+                                            value={field.value}
+                                            onChange={field.onChange}
                                         />
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                     </div>
 
@@ -448,5 +415,3 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
-
-    
