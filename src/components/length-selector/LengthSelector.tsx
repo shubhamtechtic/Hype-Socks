@@ -29,6 +29,14 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
         { name: 'Elite - Crew', icon: '/image 6-2.png' },
         { name: 'Havoc - Crew', icon: '/image 6-3.png' },
         { name: 'Polaris - Crew', icon: '/image 6-4.png' },
+    ],
+    'Knee High': [
+        { name: '2.0 - Knee High', icon: '/image 7-1.png' },
+        { name: 'Easton - Knee High', icon: '/image 7-2.png' },
+        { name: 'Havoc - Knee High', icon: '/image 7-3.png' },
+        { name: 'Polaris - Knee High', icon: '/image 7-4.png' },
+        { name: 'Stellaris - Knee High', icon: '/image 7-5.png' },
+        { name: 'Stirrup - Knee High', icon: '/image 7-6.png' },
     ]
 };
 
@@ -67,6 +75,7 @@ export function LengthSelector() {
     if (count === 2) return 'grid-cols-1 md:grid-cols-2';
     if (count === 3) return 'grid-cols-1 md:grid-cols-3';
     if (count === 4) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
+    if (count <= 6) return 'grid-cols-1 md:grid-cols-3';
     return 'grid-cols-1 md:grid-cols-3 lg:grid-cols-5';
   }
 
