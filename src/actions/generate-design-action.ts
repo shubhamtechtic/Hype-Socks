@@ -18,11 +18,10 @@ export async function generateDesignAction(values: unknown) {
     const formData = new FormData();
     const logoBlob = dataURIToBlob(logo);
     
-    // Construct absolute URL for the sock image
     const headersList = headers();
     const host = headersList.get('host') || 'localhost:9002';
     const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-    const absoluteSockImageUrl = `${protocol}://${host}${sockImage}`;
+    const absoluteSockImageUrl = new URL(sockImage, `${protocol}://${host}`).href;
     
     // Fetch the sock image and convert it to a blob
     const sockImageRes = await fetch(absoluteSockImageUrl, { cache: 'no-store' });
