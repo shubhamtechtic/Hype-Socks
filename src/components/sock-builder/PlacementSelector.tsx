@@ -10,17 +10,19 @@ interface PlacementSelectorProps {
   selectedPart: SockPart | string;
   onPartClick: (part: SockPart) => void;
   sockImage: string;
+  debugMode?: boolean;
 }
 
-const placementOptions: { id: SockPart; name: string; description: string, position: string }[] = [
-  { id: 'instep', name: 'Instep', description: 'Top of the foot', position: "top-[55%] left-[45%] w-[40%] h-[15%]" },
-  { id: 'heel', name: 'Heel', description: 'Back of the heel', position: "top-[60%] left-[22%] w-[25%] h-[20%]" },
-  { id: 'ankle', name: 'Side', description: 'Outer side panel', position: "top-[20%] left-[30%] w-[30%] h-[35%]" },
-  { id: 'sole', name: 'Sole', description: 'Bottom of the foot', position: "bottom-[5%] left-[35%] w-[40%] h-[15%]" },
-  { id: 'toe', name: 'Toe', description: 'Front toe area', position: "top-[65%] right-[2%] w-[25%] h-[20%]" },
+const placementOptions: { id: SockPart; name: string; position: string }[] = [
+  { id: 'heel', name: 'Heel', position: "top-[55%] left-[20%] w-[30%] h-[25%]" },
+  { id: 'ankle', name: 'Ankle', position: "top-[25%] left-[25%] w-[35%] h-[30%]" },
+  { id: 'calf', name: 'Calf', position: "top-[8%] left-[30%] w-[35%] h-[20%]" },
+  { id: 'toe', name: 'Toe', position: "top-[70%] left-[60%] w-[25%] h-[20%]" },
+  { id: 'sole', name: 'Sole', position: "bottom-[8%] left-[30%] w-[45%] h-[18%]" },
+  { id: 'full', name: 'Full', position: "top-[15%] left-[15%] w-[70%] h-[70%]" },
 ];
 
-export function PlacementSelector({ selectedPart, onPartClick, sockImage }: PlacementSelectorProps) {
+export function PlacementSelector({ selectedPart, onPartClick, sockImage, debugMode = false }: PlacementSelectorProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
       <div className="relative w-full aspect-square">
@@ -33,10 +35,26 @@ export function PlacementSelector({ selectedPart, onPartClick, sockImage }: Plac
         />
         {placementOptions.map((part) => {
             const isSelected = selectedPart === part.id;
-            return isSelected && (
-                <div key={part.id} className={cn("absolute border-2 border-dashed border-black rounded-md flex items-center justify-center", part.position)}>
-                    <div className="bg-black/70 text-white rounded-full p-1">
-                        <Check className="w-4 h-4" />
+            const shouldShow = isSelected || debugMode;
+            
+            return shouldShow && (
+                <div 
+                    key={part.id} 
+                    className={cn(
+                        "absolute border-2 border-dashed rounded-lg flex items-center justify-center",
+                        isSelected 
+                            ? "border-primary bg-primary/10" 
+                            : "border-gray-400 bg-gray-100/50",
+                        part.position
+                    )}
+                >
+                    <div className={cn(
+                        "rounded-full p-1.5 shadow-lg text-xs font-semibold",
+                        isSelected 
+                            ? "bg-primary text-primary-foreground" 
+                            : "bg-gray-600 text-white"
+                    )}>
+                        {isSelected ? <Check className="w-3 h-3" /> : part.name}
                     </div>
                 </div>
             )
@@ -57,7 +75,6 @@ export function PlacementSelector({ selectedPart, onPartClick, sockImage }: Plac
             )}
           >
             <p className="font-semibold">{option.name}</p>
-            <p className="text-sm">{option.description}</p>
           </button>
         ))}
       </div>

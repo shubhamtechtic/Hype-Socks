@@ -1,12 +1,12 @@
 
 'use server';
 
-import { sockDesignSchema } from '@/lib/types';
+import { sockDesignApiSchema } from '@/lib/types';
 import { dataURIToBlob } from '@/lib/utils';
 import { headers } from 'next/headers';
 
 export async function generateDesignAction(values: unknown) {
-  const validatedFields = sockDesignSchema.safeParse(values);
+  const validatedFields = sockDesignApiSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: 'Invalid input.', details: validatedFields.error.flatten().fieldErrors };
@@ -14,11 +14,16 @@ export async function generateDesignAction(values: unknown) {
 
   const { logo, parts, primaryColor, secondaryColor, accentColor, sockImage } = validatedFields.data;
 
+  // Validate that the sock image is from the Zip folder
+  if (!sockImage.startsWith('/Zip/')) {
+    return { error: 'Invalid sock image. Only images from the Zip folder are allowed.' };
+  }
+
   try {
     const formData = new FormData();
     const logoBlob = dataURIToBlob(logo);
     
-    const headersList = headers();
+    const headersList = await headers();
     const host = headersList.get('host') || 'localhost:9002';
     const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
     const absoluteSockImageUrl = new URL(sockImage, `${protocol}://${host}`).href;
@@ -38,7 +43,7 @@ export async function generateDesignAction(values: unknown) {
     formData.append('secondary_color', secondaryColor);
     formData.append('accent_color', accentColor);
 
-    const apiEndpoint = process.env.API_ENDPOINT || 'http://127.0.0.1:8000/api/v1/designs-v2/generate';
+    const apiEndpoint = process.env.API_ENDPOINT || 'http://127.0.0.1:8001/api/v1/designs-v2/generate';
     
     const response = await fetch(apiEndpoint, {
         method: 'POST',

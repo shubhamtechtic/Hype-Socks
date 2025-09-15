@@ -16,6 +16,7 @@ import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightb
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
+import { ColorPreviewCanvas } from './ColorPreviewCanvas';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 
 interface SockBuilderProps {
@@ -138,8 +139,14 @@ const getImagePaths = (sockLength: string, sockImage: string) => {
         ];
     }
     
-    // For other types like 'Knee High' or 'Over The Knee' that don't have 4 views, use the single image passed in
-    return [sockImage];
+    // For other types that don't have 4 views, try to use a default Zip image
+    // If the sockImage is already from Zip folder, use it; otherwise use a default
+    if (sockImage.startsWith('/Zip/')) {
+        return [sockImage];
+    }
+    
+    // Fallback to a default Zip image if the passed image is not from Zip folder
+    return ['/Zip/Ankle-FRONT-Sock.png'];
 };
 
 
@@ -175,9 +182,9 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     defaultValues: {
       logo: '',
       parts: 'ankle',
-      primaryColor: 'Black',
-      secondaryColor: 'White',
-      accentColor: 'Orange',
+      primaryColor: '',
+      secondaryColor: '',
+      accentColor: '',
       sockImage: sockImage,
     },
     mode: 'onChange',
@@ -185,6 +192,9 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
+  const watchedPrimaryColor = watch('primaryColor');
+  const watchedSecondaryColor = watch('secondaryColor');
+  const watchedAccentColor = watch('accentColor');
   
   React.useEffect(() => {
     setValue('sockImage', sockImage);
@@ -228,11 +238,62 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     setIsAddedToCart(true);
   }
 
+  const handleDownload = () => {
+    let imageUrl: string;
+    let filename: string;
+
+    if (generatedDesign) {
+      // Download the generated design
+      imageUrl = generatedDesign;
+      filename = `custom-sock-design-${Date.now()}.png`;
+    } else {
+      // Download the current preview image
+      const currentImageIndex = current - 1; // current is 1-based, array is 0-based
+      imageUrl = previewImages[currentImageIndex];
+      filename = `sock-preview-${currentImageIndex + 1}-${Date.now()}.png`;
+    }
+
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "Download started",
+      description: "Your image is being downloaded.",
+    });
+  };
+
   const onSubmit = async (values: SockDesignForm) => {
+    // Validate that colors are selected before generating
+    if (!values.primaryColor || !values.secondaryColor || !values.accentColor) {
+      toast({
+        variant: 'destructive',
+        title: 'Please select all colors',
+        description: 'You need to select Primary, Secondary, and Accent colors before generating.',
+      });
+      return;
+    }
+
     setIsGenerating(true);
     setGeneratedDesign(null);
     try {
-      const result = await generateDesignAction(values);
+      // Ensure we use the correct Zip image for the API call
+      const currentImageIndex = current - 1; // current is 1-based, array is 0-based
+      const zipImageToUse = previewImages[currentImageIndex];
+      
+      console.log('Generating design with image:', zipImageToUse, '(Image', current, 'of', count, ')');
+      
+      // Create a modified values object with the correct Zip image
+      const valuesWithZipImage = {
+        ...values,
+        sockImage: zipImageToUse
+      };
+      
+      const result = await generateDesignAction(valuesWithZipImage);
       if (result.error) {
         toast({
           variant: 'destructive',
@@ -318,7 +379,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                             <>
                                                 <Image src={watchedLogo} alt="Logo preview" fill className="object-contain p-2" />
                                                 <div className="absolute top-2 right-2">
-                                                    <Button variant="ghost" size="icon" onClick={handleRemoveLogo} className="bg-white/50 hover:bg-white/80 rounded-full h-8 w-8">
+                                                    <Button variant="ghost" size="icon" onClick={handleRemoveLogo} className="bg-white/50 hover:bg-white/80 rounded-full h-8 w-8" type="button">
                                                         <X className="h-4 w-4 text-gray-600"/>
                                                     </Button>
                                                 </div>
@@ -446,7 +507,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                         )}
                         {generatedDesign ? (
                             <>
-                                <div className="relative w-full aspect-square">
+                                <div className="relative w-full aspect-square flex items-center justify-center p-4">
                                     <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" unoptimized />
                                 </div>
                                 <div className="mt-8 flex justify-center gap-4">
@@ -456,6 +517,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                         className="w-full rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
                                         onClick={handleRegenerate}
                                         disabled={isGenerating}
+                                        type="button"
                                     >
                                         <RotateCw className="mr-2 h-5 w-5" />
                                         Regenerate
@@ -465,6 +527,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                         className="w-full rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
                                         onClick={handleAddToCart}
                                         disabled={isGenerating}
+                                        type="button"
                                     >
                                         <ShoppingCart className="mr-2 h-5 w-5" />
                                         Add to Cart
@@ -472,35 +535,73 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                 </div>
                             </>
                         ) : (
-                            <Carousel setApi={setApi} className="w-full">
-                                <CarouselContent>
-                                    {previewImages.map((src, index) => (
-                                        <CarouselItem key={index}>
-                                            <div className="relative w-full aspect-square">
-                                                <Image 
-                                                    src={src}
-                                                    alt={`Sock Preview ${index + 1}`}
-                                                    fill
-                                                    className="object-contain"
-                                                    data-ai-hint="custom sock"
-                                                    unoptimized
-                                                />
-                                            </div>
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                                {previewImages.length > 1 && (
-                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                                        <CarouselPrevious className="static -translate-y-0"/>
-                                        <div className="py-2 text-center text-sm text-muted-foreground">
-                                            {current} / {count}
-                                        </div>
-                                        <CarouselNext className="static -translate-y-0"/>
+                            <div className="w-full">
+                                {/* Color Legend */}
+                                <div className="mb-4 flex items-center justify-center gap-4 text-sm">
+                                    <div className="flex items-center gap-2">
+                                        <div 
+                                            className={`w-3 h-3 rounded-full border border-gray-300 ${!watchedPrimaryColor ? 'bg-gray-200' : ''}`}
+                                            style={{ backgroundColor: watchedPrimaryColor ? colors.find(c => c.name === watchedPrimaryColor)?.hex : undefined }}
+                                        />
+                                        <span className={`${!watchedPrimaryColor ? 'text-gray-400' : 'text-gray-600'}`}>
+                                            Primary {!watchedPrimaryColor && '(Not selected)'}
+                                        </span>
                                     </div>
-                                )}
-                            </Carousel>
+                                    <div className="flex items-center gap-2">
+                                        <div 
+                                            className={`w-3 h-3 rounded-full border border-gray-300 ${!watchedSecondaryColor ? 'bg-gray-200' : ''}`}
+                                            style={{ backgroundColor: watchedSecondaryColor ? colors.find(c => c.name === watchedSecondaryColor)?.hex : undefined }}
+                                        />
+                                        <span className={`${!watchedSecondaryColor ? 'text-gray-400' : 'text-gray-600'}`}>
+                                            Secondary {!watchedSecondaryColor && '(Not selected)'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div 
+                                            className={`w-3 h-3 rounded-full border border-gray-300 ${!watchedAccentColor ? 'bg-gray-200' : ''}`}
+                                            style={{ backgroundColor: watchedAccentColor ? colors.find(c => c.name === watchedAccentColor)?.hex : undefined }}
+                                        />
+                                        <span className={`${!watchedAccentColor ? 'text-gray-400' : 'text-gray-600'}`}>
+                                            Accent {!watchedAccentColor && '(Not selected)'}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <Carousel setApi={setApi} className="w-full">
+                                    <CarouselContent>
+                                        {previewImages.map((src, index) => (
+                                            <CarouselItem key={index}>
+                                                <div className="relative w-full aspect-square flex items-center justify-center p-4">
+                                                    <ColorPreviewCanvas
+                                                        imageSrc={src}
+                                                        primaryColor={watchedPrimaryColor}
+                                                        secondaryColor={watchedSecondaryColor}
+                                                        accentColor={watchedAccentColor}
+                                                        className="w-full h-full"
+                                                    />
+                                                </div>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                    {previewImages.length > 1 && (
+                                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                            <CarouselPrevious className="static -translate-y-0" type="button"/>
+                                            <div className="py-2 text-center text-sm text-muted-foreground">
+                                                {current} / {count}
+                                            </div>
+                                            <CarouselNext className="static -translate-y-0" type="button"/>
+                                        </div>
+                                    )}
+                                </Carousel>
+                            </div>
                         )}
-                        <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
+                        <Button 
+                            size="icon" 
+                            variant="outline" 
+                            className="absolute top-4 right-4 rounded-full bg-white"
+                            onClick={handleDownload}
+                            type="button"
+                        >
                             <Download className="h-5 w-5 text-gray-600"/>
                         </Button>
                     </Card>
