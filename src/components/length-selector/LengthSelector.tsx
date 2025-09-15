@@ -10,8 +10,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const sockLengths = [
-  { name: 'Ankle', icon: '/image 4.png' },
-  { name: 'Quarter', icon: '/image 5.png' },
+  { name: 'Ankle', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Heel-RIGHT-Sock.png' },
+  { name: 'Quarter', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Ankle-RIGHT-Sock.png' },
   { name: 'Crew', icon: '/image 6.png' },
   { name: 'Knee High', icon: '/image 7.png' },
   { name: 'Over The Knee', icon: '/image 8.png' },
@@ -19,10 +19,10 @@ const sockLengths = [
 
 const subCategories: Record<string, { name: string; icon: string }[]> = {
     'Ankle': [
-      { name: 'Ankle', icon: '/image 4.png' },
+      { name: 'Ankle', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Heel-RIGHT-Sock.png' },
     ],
     'Quarter': [
-      { name: 'Quarter', icon: '/image 5.png' },
+      { name: 'Quarter', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Ankle-RIGHT-Sock.png' },
     ],
     'Crew': [
         { name: '2.0 - Crew', icon: '/image 6-1.png' },
@@ -207,3 +207,5 @@ export function LengthSelector() {
     </div>
   );
 }
+
+    
