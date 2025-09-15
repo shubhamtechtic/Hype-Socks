@@ -52,10 +52,7 @@ export function LengthSelector() {
 
   const handleLengthSelect = (lengthName: string) => {
     setSelectedLength(lengthName);
-    if (!subCategories[lengthName] || subCategories[lengthName].length <= 1) {
-        setSelectedSub(lengthName);
-        router.push(`/build?length=${encodeURIComponent(lengthName)}`);
-    }
+    setSelectedSub(null); // Reset sub-selection when a new length is picked
   };
 
   const handleSubSelect = (subName: string) => {
@@ -70,12 +67,8 @@ export function LengthSelector() {
   };
   
   const handleGoBack = () => {
-    if (selectedSub && subCategories[selectedLength!] && subCategories[selectedLength!].length > 1) {
-      setSelectedSub(null);
-    } else {
-      setSelectedLength(null);
-      setSelectedSub(null);
-    }
+    setSelectedLength(null);
+    setSelectedSub(null);
   };
 
   const selectedSock = sockLengths.find((s) => s.name === selectedLength);
@@ -126,71 +119,36 @@ export function LengthSelector() {
             </div>
           ) : (
             <div>
-              {currentSubCategories && currentSubCategories.length > 1 && !selectedSub ? (
-                 <div className="flex flex-col items-center">
-                    <h2 className="text-2xl font-bold uppercase tracking-tight md:text-3xl mb-6">
-                        Choose Your <span className="text-primary">{selectedLength} Style</span>
-                    </h2>
-                    <div className={`grid ${getGridCols(currentSubCategories.length)} gap-6 w-full`}>
-                        {currentSubCategories.map((subSock) => (
-                        <div
-                            key={subSock.name}
-                            onClick={() => handleSubSelect(subSock.name)}
-                            className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
-                        >
-                            <div className="relative mx-auto h-48 w-full md:h-64">
-                                <Image
-                                    src={subSock.icon}
-                                    alt={`${subSock.name} sock`}
-                                    fill
-                                    className="object-contain animate-tilt-shaking"
-                                    data-ai-hint={`${subSock.name.toLowerCase()} sock`}
-                                />
-                            </div>
-                            <p className="mt-2 text-sm font-semibold">{subSock.name}</p>
+              <div className="flex flex-col items-center">
+                <h2 className="text-2xl font-bold uppercase tracking-tight md:text-3xl mb-6">
+                    Choose Your <span className="text-primary">{selectedLength} Style</span>
+                </h2>
+                <div className={`grid ${getGridCols(currentSubCategories.length)} gap-6 w-full`}>
+                    {currentSubCategories.map((subSock) => (
+                    <div
+                        key={subSock.name}
+                        onClick={() => handleSubSelect(subSock.name)}
+                        className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
+                    >
+                        <div className="relative mx-auto h-48 w-full md:h-64">
+                            <Image
+                                src={subSock.icon}
+                                alt={`${subSock.name} sock`}
+                                fill
+                                className="object-contain animate-tilt-shaking"
+                                data-ai-hint={`${subSock.name.toLowerCase()} sock`}
+                            />
                         </div>
-                        ))}
+                        <p className="mt-2 text-sm font-semibold">{subSock.name}</p>
                     </div>
-                    <div className="mt-8 flex justify-center gap-4">
-                        <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
-                            <ChevronLeft className="mr-2 h-5 w-5" /> Back
-                        </Button>
-                    </div>
-                 </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-8">
-                    <div className="flex w-full items-center justify-center">
-                        <div
-                            onClick={handleContinue}
-                            className={cn(
-                            'relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all w-full max-w-sm',
-                            'border-primary/30 bg-primary/5 hover:border-primary'
-                            )}
-                        >
-                             <div className="relative mx-auto h-80 w-full md:h-96">
-                                <Image
-                                    src={currentSubCategories.find(s => s.name === selectedSub)?.icon || selectedSock!.icon}
-                                    alt={`${selectedSub} sock`}
-                                    fill
-                                    className="object-contain animate-tilt-shaking"
-                                    data-ai-hint={`${selectedSub?.toLowerCase()} sock`}
-                                />
-                            </div>
-                            <div className="mt-2 flex items-center justify-between">
-                                <p className="text-lg font-semibold">{selectedSub} Length</p>
-                                <Button size="icon" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90" >
-                                    <ArrowRight className="h-5 w-5" />
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                     <div className="flex justify-center gap-4">
-                        <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
-                            <ChevronLeft className="mr-2 h-5 w-5" /> Back
-                        </Button>
-                    </div>
+                    ))}
                 </div>
-              )}
+                <div className="mt-8 flex justify-center gap-4">
+                    <Button variant="outline" size="lg" className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-primary-foreground" onClick={handleGoBack}>
+                        <ChevronLeft className="mr-2 h-5 w-5" /> Back
+                    </Button>
+                </div>
+              </div>
             </div>
           )}
         </div>
