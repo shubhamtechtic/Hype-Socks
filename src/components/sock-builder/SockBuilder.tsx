@@ -12,10 +12,11 @@ import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft } from 'lucide-react';
+import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft, Lightbulb, Download } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 interface SockBuilderProps {
     sockLength: string;
@@ -34,16 +35,15 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     resolver: zodResolver(sockDesignSchema),
     defaultValues: {
       logo: '',
-      parts: '',
-      primaryColor: '',
-      secondaryColor: '',
-      accentColor: '',
+      parts: 'ankle',
+      primaryColor: 'Black',
+      secondaryColor: 'White',
+      accentColor: 'Orange',
     },
     mode: 'onChange',
   });
 
   const { watch, setValue, getValues } = form;
-  const watchedParts = watch('parts');
   const watchedLogo = watch('logo');
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,10 +68,6 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const handleRemoveLogo = () => {
     setValue('logo', '', { shouldValidate: true });
   }
-
-  const handlePartClick = (part: SockPart) => {
-    setValue('parts', part, { shouldValidate: true });
-  };
   
   const handleGoBack = () => {
     router.back();
@@ -100,7 +96,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         toast({
           variant: 'destructive',
           title: 'Uh oh! Something went wrong.',
-          description: result.error,
+          description: <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4"><code className="text-white">{result.error}</code></pre>,
         });
       } else if (result.data) {
         setGeneratedDesign(result.data.designDataUri);
@@ -110,7 +106,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         toast({
             variant: 'destructive',
             title: 'Uh oh! Something went wrong.',
-            description: `An unexpected error occurred: ${errorMessage}`,
+            description: <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4"><code className="text-white">{errorMessage}</code></pre>,
         });
     } finally {
       setIsGenerating(false);
@@ -199,18 +195,18 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Left Column */}
-                <div className="space-y-8">
-                    <Card className="bg-white p-6 md:p-8 shadow-xl">
-                        <h2 className="text-2xl font-bold uppercase tracking-tight">Upload Your <span className="text-primary">Logo</span></h2>
-                        <p className="mt-1 text-sm text-gray-500">Upload your brand or team logo (PNG, JPG, SVG supported)</p>
-                        <div className="mt-6">
+                <div className="space-y-6">
+                    <div>
+                        <h2 className="text-xl font-semibold">Upload Your Logo</h2>
+                        <p className="text-sm text-gray-500">Upload your brand or team logo (PNG, JPG)</p>
+                        <div className="mt-4">
                             <FormField
                             control={form.control}
                             name="logo"
                             render={() => (
                                 <FormItem>
                                 <FormControl>
-                                    <div className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10 relative">
+                                    <div className="mt-2 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/50 px-6 py-10 relative h-48">
                                         {watchedLogo ? (
                                             <>
                                                 <Image src={watchedLogo} alt="Logo preview" fill className="object-contain p-2" />
@@ -221,13 +217,13 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                                 </div>
                                             </>
                                         ) : (
-                                            <div className="text-center w-full">
-                                                <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                                                <p className="mt-4 text-sm text-gray-600">
+                                            <div className="text-center w-full space-y-2">
+                                                <Upload className="mx-auto h-10 w-10 text-gray-400" />
+                                                <p className="text-sm text-gray-600">
                                                     Drop your logo here, or click to browse
                                                 </p>
-                                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, SVG up to 10MB</p>
-                                                <Button asChild variant="outline" className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full">
+                                                <p className="text-xs leading-5 text-gray-600">PNG, JPG up to 10MB</p>
+                                                <Button asChild variant="outline" size="sm" className="mt-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-full">
                                                     <label htmlFor="file-upload">Choose File</label>
                                                 </Button>
                                                 <Input id="file-upload" name="logo" type="file" className="sr-only" onChange={handleFileChange} accept="image/png, image/jpeg, image/svg+xml" />
@@ -240,111 +236,107 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             )}
                             />
                         </div>
-                        
-                        {watchedLogo && (
-                            <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <CheckCircle2 className="h-5 w-5 text-green-600" />
-                                    <p className="font-semibold text-sm text-green-800">Logo uploaded successfully</p>
-                                </div>
-                                <button onClick={handleRemoveLogo}>
-                                    <X className="h-5 w-5 text-green-600"/>
-                                </button>
-                            </div>
-                        )}
 
-                        <div className="mt-4 rounded-lg bg-gray-50 border border-gray-200 p-4 flex items-center gap-3">
-                            <Image src={sockImage} alt={sockLength} width={40} height={40} data-ai-hint="custom sock" className="animate-tilt-shaking" />
-                            <div>
-                                <p className="font-semibold text-sm">{sockLength}</p>
-                                <p className="text-xs text-gray-500">Ready for customization</p>
-                            </div>
+                         <div className="mt-4 rounded-lg bg-yellow-50 border border-yellow-200 p-3 flex items-start gap-3">
+                            <Lightbulb className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                            <p className="text-xs text-yellow-800">
+                                <span className='font-semibold'>Tip:</span> For best results, use a high-contrast logo with transparent background
+                            </p>
                         </div>
-                    </Card>
-                     <Card className="bg-white p-6 md:p-8 shadow-xl">
-                        <div className="space-y-6">
-                            <FormField
-                                control={form.control}
-                                name="primaryColor"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <ColorPicker
-                                            label="Primary Color"
-                                            description="Choose a color for color layer 1 (if applicable)."
-                                            value={field.value}
-                                            onChange={field.onChange}
+                    </div>
+                     
+                    <div>
+                        <h2 className="text-xl font-semibold">Choose Colors</h2>
+                        <div className="mt-4 space-y-2">
+                            <Accordion type="single" collapsible defaultValue='item-1' className="w-full">
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Primary Color</AccordionTrigger>
+                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
+                                         <FormField
+                                            control={form.control}
+                                            name="primaryColor"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <ColorPicker
+                                                        description="Choose a color for the base of the sock."
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                    />
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
                                         />
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="secondaryColor"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <ColorPicker
-                                            label="Secondary Color"
-                                            description="Choose a color for color layer 2 (if applicable)."
-                                            value={field.value}
-                                            onChange={field.onChange}
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Secondary Color</AccordionTrigger>
+                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
+                                        <FormField
+                                            control={form.control}
+                                            name="secondaryColor"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <ColorPicker
+                                                        description="Choose a color for secondary elements."
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                    />
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
                                         />
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                             <FormField
-                                control={form.control}
-                                name="accentColor"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <ColorPicker
-                                            label="Accent Color"
-                                            description="Choose a color for color layer 3 (if applicable)."
-                                            value={field.value}
-                                            onChange={field.onChange}
+                                    </AccordionContent>
+                                </AccordionItem>
+                                 <AccordionItem value="item-3">
+                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Accent Color</AccordionTrigger>
+                                    <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
+                                         <FormField
+                                            control={form.control}
+                                            name="accentColor"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <ColorPicker
+                                                        description="Choose a color for accents and highlights."
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                    />
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
                                         />
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
-                    </Card>
+                    </div>
+                     <Button type="submit" size="lg" className="w-full rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
+                        {isGenerating ? (
+                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Art Work...</>
+                        ) : (
+                            <><Wand2 className="mr-2 h-4 w-4" /> Generate Art Work</>
+                        )}
+                    </Button>
                 </div>
 
 
                 {/* Right Column */}
-                <Card className="bg-white p-6 md:p-8 shadow-xl">
-                    <h2 className="text-2xl font-bold uppercase tracking-tight">Choose <span className="text-primary">Logo Placement</span></h2>
-                    <div className="mt-4">
-                        <PlacementSelector selectedPart={watchedParts} onPartClick={handlePartClick} sockImage={sockImage} />
-                         <FormField
-                            control={form.control}
-                            name="parts"
-                            render={() => (
-                            <FormItem>
-                                <FormMessage className="text-center mt-2" />
-                            </FormItem>
-                            )}
-                        />
-                    </div>
-                </Card>
-            </div>
-            
-            <div className="flex justify-center items-center gap-4 pt-4">
-                <Button variant="outline" size="lg" className="rounded-full px-8 font-bold" onClick={handleGoBack}>
-                    <ChevronLeft className="mr-2 h-5 w-5" /> Back
-                </Button>
-                <Button variant="ghost" size="lg" className="rounded-full px-8 font-bold" onClick={handleStartOver}>
-                    Start Over
-                </Button>
-                <Button type="submit" size="lg" className="rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
-                    {isGenerating ? (
-                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...</>
-                    ) : (
-                        <><Wand2 className="mr-2 h-4 w-4" /> Generate AI Design</>
-                    )}
-                </Button>
+                <div className="sticky top-24">
+                    <h2 className="text-xl font-semibold mb-4">Preview</h2>
+                    <Card className="bg-gray-50 p-6 md:p-8 shadow-inner border">
+                         <div className="relative w-full aspect-square">
+                            <Image 
+                                src={sockImage} 
+                                alt="Sock Preview" 
+                                fill
+                                className="object-contain animate-tilt-shaking"
+                                data-ai-hint="custom sock"
+                            />
+                            <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
+                                <Download className="h-5 w-5 text-gray-600"/>
+                            </Button>
+                        </div>
+                    </Card>
+                </div>
             </div>
         </form>
       </Form>
