@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
-import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
+import { sockDesignSchema, type SockPart, type SockDesignForm, colors } from '@/lib/types';
 import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightbulb, Download } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -26,23 +26,28 @@ interface SockBuilderProps {
 
 const getImagePaths = (sockLength: string, sockImage: string) => {
     const lowerSockLength = sockLength.toLowerCase();
-    let prefix = '';
   
     if (lowerSockLength.includes('ankle')) {
-      prefix = 'Ankle';
-    } else if (lowerSockLength.includes('quarter')) {
-      prefix = 'Heel';
-    } else if (lowerSockLength.includes('crew')) {
-      prefix = 'Crew';
-    }
-  
-    if (prefix) {
       return [
-        `/Zip/${prefix}-RIGHT-Sock.png`,
-        `/Zip/${prefix}-LEFT-Sock.png`,
-        `/Zip/${prefix}-FRONT-Sock.png`,
-        `/Zip/${prefix}-BACK-Sock.png`,
+        '/Zip/Ankle-RIGHT-Sock.png',
+        '/Zip/Ankle-LEFT-Sock.png',
+        '/Zip/Ankle-FRONT-Sock.png',
+        '/Zip/Ankle-BACK-Sock.png',
       ];
+    } else if (lowerSockLength.includes('quarter')) {
+      return [
+        '/Zip/Heel-RIGHT-Sock.png',
+        '/Zip/Heel-LEFT-Sock.png',
+        '/Zip/Heel-FRONT-Sock.png',
+        '/Zip/Heel-BACK-Sock.png',
+      ];
+    } else if (lowerSockLength.includes('crew')) {
+        return [
+            '/Zip/Crew-RIGHT-Sock.png',
+            '/Zip/Crew-LEFT-Sock.png',
+            '/Zip/Crew-FRONT-Sock.png',
+            '/Zip/Crew-BACK-Sock.png',
+        ];
     }
     
     // For other types like 'Knee High' or 'Over The Knee', use the single image passed in
@@ -90,6 +95,13 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
+  const watchedPrimaryColor = watch('primaryColor');
+  const watchedSecondaryColor = watch('secondaryColor');
+  const watchedAccentColor = watch('accentColor');
+
+  const getColorHex = (colorName: string) => {
+    return colors.find(c => c.name === colorName)?.hex ?? '#FFFFFF';
+  }
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -186,6 +198,12 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     );
   }
 
+  const ColorIndicator = ({ hex }: { hex: string }) => (
+    <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: hex }} />
+    </div>
+  );
+
   return (
     <div className="container mx-auto max-w-7xl px-4">
        <Form {...form}>
@@ -268,7 +286,12 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                         <div className="mt-4 space-y-2">
                             <Accordion type="single" collapsible defaultValue='item-1' className="w-full">
                                 <AccordionItem value="item-1">
-                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Primary Color</AccordionTrigger>
+                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
+                                        <div className='flex items-center gap-3'>
+                                            <ColorIndicator hex={getColorHex(watchedPrimaryColor)} />
+                                            <span>Primary Color</span>
+                                        </div>
+                                    </AccordionTrigger>
                                     <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
                                          <FormField
                                             control={form.control}
@@ -287,7 +310,12 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-2">
-                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Secondary Color</AccordionTrigger>
+                                <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
+                                        <div className='flex items-center gap-3'>
+                                            <ColorIndicator hex={getColorHex(watchedSecondaryColor)} />
+                                            <span>Secondary Color</span>
+                                        </div>
+                                    </AccordionTrigger>
                                     <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
                                         <FormField
                                             control={form.control}
@@ -306,7 +334,12 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                     </AccordionContent>
                                 </AccordionItem>
                                  <AccordionItem value="item-3">
-                                    <AccordionTrigger className='font-semibold p-4 border rounded-lg'>Accent Color</AccordionTrigger>
+                                 <AccordionTrigger className='font-semibold p-4 border rounded-lg'>
+                                        <div className='flex items-center gap-3'>
+                                            <ColorIndicator hex={getColorHex(watchedAccentColor)} />
+                                            <span>Accent Color</span>
+                                        </div>
+                                    </AccordionTrigger>
                                     <AccordionContent className='p-4 border border-t-0 rounded-b-lg'>
                                          <FormField
                                             control={form.control}
@@ -415,3 +448,5 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
+
+    
