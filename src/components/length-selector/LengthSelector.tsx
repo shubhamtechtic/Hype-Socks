@@ -47,25 +47,20 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
 
 export function LengthSelector() {
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
-  const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const router = useRouter();
 
   const handleLengthSelect = (lengthName: string) => {
     setSelectedLength(lengthName);
-    setSelectedSub(null); // Reset sub-selection when a new length is picked
   };
 
-  const handleSubSelect = (subName: string) => {
-    setSelectedSub(subName);
-    router.push(`/build?length=${encodeURIComponent(subName)}`);
+  const handleSubSelect = (subName: string, subIcon: string) => {
+    router.push(`/build?length=${encodeURIComponent(subName)}&image=${encodeURIComponent(subIcon)}`);
   };
   
   const handleGoBack = () => {
     setSelectedLength(null);
-    setSelectedSub(null);
   };
 
-  const selectedSock = sockLengths.find((s) => s.name === selectedLength);
   const currentSubCategories = selectedLength ? subCategories[selectedLength] : [];
 
   const getGridCols = (count: number) => {
@@ -121,7 +116,7 @@ export function LengthSelector() {
                     {currentSubCategories.map((subSock) => (
                     <div
                         key={subSock.name}
-                        onClick={() => handleSubSelect(subSock.name)}
+                        onClick={() => handleSubSelect(subSock.name, subSock.icon)}
                         className='relative cursor-pointer rounded-lg border-2 p-4 text-center transition-all hover:border-primary hover:shadow-md'
                     >
                         <div className="relative mx-auto h-48 w-full md:h-64">
