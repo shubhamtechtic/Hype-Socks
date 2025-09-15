@@ -4,25 +4,18 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
-import { Textarea } from '@/components/ui/textarea';
+import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm } from '@/lib/types';
-import { Upload, Wand2, Loader2, Download, ArrowRight, Lightbulb, CheckCircle2, X, ChevronLeft, RotateCw, ShoppingCart } from 'lucide-react';
+import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-
-const examplePrompts = [
-    { text: "Red athletic socks for my gym with bold logo placement" },
-    { text: "Black and white sports socks for basketball team" },
-    { text: "Neon green running socks with moisture-wicking design" },
-]
+import { ColorPicker } from './ColorPicker';
 
 interface SockBuilderProps {
     sockLength: string;
@@ -41,8 +34,10 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     resolver: zodResolver(sockDesignSchema),
     defaultValues: {
       logo: '',
-      prompt: '',
       parts: '',
+      primaryColor: '',
+      secondaryColor: '',
+      accentColor: '',
     },
     mode: 'onChange',
   });
@@ -245,11 +240,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             )}
                             />
                         </div>
-                        <div className="mt-4 flex items-start gap-2 text-xs text-gray-500">
-                            <Lightbulb className="h-4 w-4 shrink-0 mt-0.5 text-yellow-500" />
-                            <p>Tip: For best results, use a high-contrast logo with transparent background</p>
-                        </div>
-
+                        
                         {watchedLogo && (
                             <div className="mt-4 rounded-lg bg-green-50 border border-green-200 p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
@@ -271,38 +262,52 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                         </div>
                     </Card>
                      <Card className="bg-white p-6 md:p-8 shadow-xl">
-                        <h2 className="text-2xl font-bold uppercase tracking-tight">Design <span className="text-primary">Prompt</span></h2>
-                        <p className="mt-1 text-xs text-gray-500">Example: Red athletic socks for my gym with bold logo placement with red on toe part blue on heel part cuff should be in black</p>
-                        <FormField
-                        control={form.control}
-                        name="prompt"
-                        render={({ field }) => (
-                            <FormItem className="mt-4">
-                            <FormControl>
-                                <Textarea
-                                placeholder="Example: Red athletic socks for my gym with bold logo placement with red on toe part blue on heel part cuff should be in black"
-                                className="resize-none bg-gray-50"
-                                {...field}
-                                rows={3}
-                                maxLength={250}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <div className="mt-4 flex flex-wrap gap-2">
-                            {examplePrompts.map(p => (
-                                <button
-                                    type="button"
-                                    key={p.text}
-                                    onClick={() => setValue('prompt', p.text, { shouldValidate: true })}
-                                    className="flex items-center gap-2 rounded-full border bg-white px-3 py-1.5 text-xs text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                                >
-                                    {p.text}
-                                    <ArrowRight className="h-3 w-3" />
-                                </button>
-                            ))}
+                        <div className="space-y-6">
+                            <FormField
+                                control={form.control}
+                                name="primaryColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Primary Color"
+                                            description="Choose a color for color layer 1 (if applicable)."
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="secondaryColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Secondary Color"
+                                            description="Choose a color for color layer 2 (if applicable)."
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="accentColor"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <ColorPicker
+                                            label="Accent Color"
+                                            description="Choose a color for color layer 3 (if applicable)."
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                     </Card>
                 </div>

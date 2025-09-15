@@ -11,13 +11,15 @@ export async function generateDesignAction(values: unknown) {
     return { error: 'Invalid input.', details: validatedFields.error.flatten().fieldErrors };
   }
 
-  const { logo, prompt, parts } = validatedFields.data;
+  const { logo, parts, primaryColor, secondaryColor, accentColor } = validatedFields.data;
 
   try {
     const input: GenerateSockDesignInput = {
       logoDataUri: logo,
-      prompt,
-      selectedParts: [parts],
+      selectedPart: parts,
+      baseColor: primaryColor,
+      secondaryColor: secondaryColor,
+      accentColor: accentColor,
     };
     const result = await generateSockDesign(input);
     return { data: result };

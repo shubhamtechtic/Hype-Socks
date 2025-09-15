@@ -18,8 +18,10 @@ const GenerateSockDesignInputSchema = z.object({
     .describe(
       "A logo image as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
-  prompt: z.string().describe('The prompt describing the desired sock design.'),
-  selectedParts: z.array(z.string()).describe('The selected sock parts for logo placement.'),
+  selectedPart: z.string().describe('The selected sock part for logo placement.'),
+  baseColor: z.string().describe('Base/main color of the sock.'),
+  secondaryColor: z.string().describe('Secondary color of the sock.'),
+  accentColor: z.string().describe('Accent/highlight color on panels.'),
 });
 export type GenerateSockDesignInput = z.infer<typeof GenerateSockDesignInputSchema>;
 
@@ -35,13 +37,17 @@ export async function generateSockDesign(input: GenerateSockDesignInput): Promis
 const generateSockDesignPrompt = ai.definePrompt({
   name: 'generateSockDesignPrompt',
   input: {schema: GenerateSockDesignInputSchema},
-  prompt: `You are a sock design expert. Create a sock design based on the following logo, prompt and selected sock parts.
+  prompt: `Design a single crew-length sock using a {{{baseColor}}}, {{{accentColor}}}, and {{{secondaryColor}}} color palette.
+The sock should feature a {{{baseColor}}} foundation with bold {{{accentColor}}} panels on the heel, toe, calf, and mid-foot areas.
+Include a pattern of alternating horizontal bars or stripes along the upper shaft or side, filled with {{{secondaryColor}}} for visual interest.
+Render the sock from at least three views (front, side, and back).
 
 Logo: {{media url=logoDataUri}}
-Prompt: {{{prompt}}}
-Selected Parts: {{#each selectedParts}}{{{this}}}{{/each}}
+Selected Part for logo: {{{selectedPart}}}
 
-Ensure the generated image is seamless and suitable for printing on a sock. The output should be a data URI representing the generated image.`,
+Ensure the logo is clearly visible in at least two of the views, positioned naturally according to the sock's curvature and texture on the selected part.
+The logo should appear naturally printed on the knit fabric, following fabric contours with realistic lighting and shading.
+The overall look should be premium, modern, and athletic.`,
 });
 
 const generateSockDesignFlow = ai.defineFlow(
