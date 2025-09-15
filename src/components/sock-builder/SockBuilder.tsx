@@ -37,29 +37,6 @@ const getImagePaths = (sockLength: string, sockImage: string) => {
     }
 
     if (prefix) {
-        if (prefix === 'Crew') {
-             // Specific handling for Crew styles if needed, for now use a generic approach
-             // This can be expanded if different crew styles have different image name patterns.
-             // For now, let's assume a generic pattern doesn't fit and we fall back to sockImage
-             // or use a specific known pattern if one exists.
-             // Based on the user feedback, a single image seems to be passed.
-             // Let's try to construct a generic path for the main crew types.
-             const crewStyle = sockLength.split(' - ')[0].replace(' ', ''); // e.g. "2.0", "Elite"
-             // This is still complex. Let's simplify based on what we know for sure.
-             // Let's go back to a more reliable method based on the main categories.
-             return [
-                 `/Zip/${prefix}-RIGHT-Sock.png`,
-                 `/Zip/${prefix}-LEFT-Sock.png`,
-                 `/Zip/${prefix}-FRONT-Sock.png`,
-                 `/Zip/${prefix}-BACK-Sock.png`,
-             ].filter(src => {
-                 // A simple check to see if the image might exist. In a real app, you'd have a manifest.
-                 // For now, let's just return the paths. We need to ensure these files exist.
-                 // The user provided screenshots showing these files exist.
-                 return true;
-             });
-
-        }
         return [
             `/Zip/${prefix}-RIGHT-Sock.png`,
             `/Zip/${prefix}-LEFT-Sock.png`,
@@ -175,81 +152,37 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     }
   };
   
-  if (generatedDesign) {
-     if (isAddedToCart) {
-      return (
-        <div className="container mx-auto max-w-4xl px-4 text-center">
-            <Card className="bg-white p-8 shadow-xl md:p-12">
-                 <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
-                <h2 className="mt-6 text-3xl font-bold uppercase tracking-tight md:text-4xl">
-                    Added to <span className="text-primary">Cart!</span>
-                </h2>
-                <p className="mt-2 text-gray-600">Your custom sock design has been successfully added to your cart.</p>
-                <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
-                    <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
-                </div>
-                <div className="mt-8 flex justify-center gap-4">
-                    <Button 
-                        size="lg" 
-                        className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
-                        onClick={() => router.push('/')}>
-                        Continue Shopping
-                    </Button>
-                    <Button 
-                        size="lg" 
-                        variant="outline" 
-                        className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
-                        onClick={handleStartOver}>
-                        Create Another Design
-                    </Button>
-                </div>
-            </Card>
-        </div>
-      );
-     }
-
+  if (isAddedToCart && generatedDesign) {
     return (
-        <div className="container mx-auto max-w-4xl px-4 text-center">
-            <Card className="bg-white p-8 shadow-xl md:p-12">
-                <h2 className="text-3xl font-bold uppercase tracking-tight md:text-4xl">
-                    Your <span className="text-primary">Design</span> is Ready!
-                </h2>
-                <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
-                     {isGenerating ? (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-10 rounded-lg">
-                            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                            <p className="mt-4 font-semibold">Generating new design...</p>
-                        </div>
-                    ) : (
-                        <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
-                    )}
-                </div>
-                <div className="mt-8 flex justify-center gap-4">
-                     <Button 
-                        size="lg" 
-                        variant="outline" 
-                        className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
-                        onClick={handleRegenerate}
-                        disabled={isGenerating}
-                     >
-                        <RotateCw className="mr-2 h-5 w-5" />
-                        Regenerate Design
-                    </Button>
-                    <Button 
-                        size="lg" 
-                        className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
-                        onClick={handleAddToCart}
-                        disabled={isGenerating}
-                    >
-                        <ShoppingCart className="mr-2 h-5 w-5" />
-                        Add to Cart
-                    </Button>
-                </div>
-            </Card>
-        </div>
+      <div className="container mx-auto max-w-4xl px-4 text-center">
+          <Card className="bg-white p-8 shadow-xl md:p-12">
+               <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
+              <h2 className="mt-6 text-3xl font-bold uppercase tracking-tight md:text-4xl">
+                  Added to <span className="text-primary">Cart!</span>
+              </h2>
+              <p className="mt-2 text-gray-600">Your custom sock design has been successfully added to your cart.</p>
+              <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
+                  <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
+              </div>
+              <div className="mt-8 flex justify-center gap-4">
+                  <Button 
+                      size="lg" 
+                      className="rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
+                      onClick={() => router.push('/')}>
+                      Continue Shopping
+                  </Button>
+                  <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
+                      onClick={handleStartOver}>
+                      Create Another Design
+                  </Button>
+              </div>
+          </Card>
+      </div>
     );
   }
-
 
   return (
     <div className="container mx-auto max-w-7xl px-4">
@@ -392,47 +325,83 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             </Accordion>
                         </div>
                     </div>
-                     <Button type="submit" size="lg" className="w-full rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
-                        {isGenerating ? (
-                            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Art Work...</>
-                        ) : (
-                            <><Wand2 className="mr-2 h-4 w-4" /> Generate Art Work</>
-                        )}
-                    </Button>
+                    {generatedDesign ? (
+                        <div className="flex justify-center gap-4">
+                            <Button 
+                                size="lg" 
+                                variant="outline" 
+                                className="w-full rounded-full border-2 border-primary px-8 py-6 text-base font-bold text-primary hover:bg-primary hover:text-white"
+                                onClick={handleRegenerate}
+                                disabled={isGenerating}
+                            >
+                                <RotateCw className="mr-2 h-5 w-5" />
+                                Regenerate
+                            </Button>
+                            <Button 
+                                size="lg" 
+                                className="w-full rounded-full bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90"
+                                onClick={handleAddToCart}
+                                disabled={isGenerating}
+                            >
+                                <ShoppingCart className="mr-2 h-5 w-5" />
+                                Add to Cart
+                            </Button>
+                        </div>
+                    ) : (
+                        <Button type="submit" size="lg" className="w-full rounded-full bg-black text-white px-8 font-bold hover:bg-gray-800" disabled={isGenerating}>
+                            {isGenerating ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Art Work...</>
+                            ) : (
+                                <><Wand2 className="mr-2 h-4 w-4" /> Generate Art Work</>
+                            )}
+                        </Button>
+                    )}
                 </div>
 
 
                 {/* Right Column */}
                 <div className="sticky top-24">
-                    <h2 className="text-xl font-semibold mb-4">Preview</h2>
-                    <Card className="bg-gray-50 p-6 md:p-8 shadow-inner border">
-                        <Carousel setApi={setApi} className="w-full">
-                            <CarouselContent>
-                                {previewImages.map((src, index) => (
-                                    <CarouselItem key={index}>
-                                        <div className="relative w-full aspect-square">
-                                            <Image 
-                                                src={src}
-                                                alt={`Sock Preview ${index + 1}`}
-                                                fill
-                                                className="object-contain"
-                                                data-ai-hint="custom sock"
-                                                unoptimized
-                                            />
+                    <h2 className="text-xl font-semibold mb-4">{generatedDesign ? 'Your AI Design' : 'Preview'}</h2>
+                    <Card className="bg-gray-50 p-6 md:p-8 shadow-inner border relative">
+                        {isGenerating && (
+                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 z-10 rounded-lg">
+                                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                                <p className="mt-4 font-semibold">Generating your design...</p>
+                            </div>
+                        )}
+                        {generatedDesign ? (
+                            <div className="relative w-full aspect-square">
+                                <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" />
+                            </div>
+                        ) : (
+                            <Carousel setApi={setApi} className="w-full">
+                                <CarouselContent>
+                                    {previewImages.map((src, index) => (
+                                        <CarouselItem key={index}>
+                                            <div className="relative w-full aspect-square">
+                                                <Image 
+                                                    src={src}
+                                                    alt={`Sock Preview ${index + 1}`}
+                                                    fill
+                                                    className="object-contain"
+                                                    data-ai-hint="custom sock"
+                                                    unoptimized
+                                                />
+                                            </div>
+                                        </CarouselItem>
+                                    ))}
+                                </CarouselContent>
+                                {previewImages.length > 1 && (
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                        <CarouselPrevious className="static -translate-y-0"/>
+                                        <div className="py-2 text-center text-sm text-muted-foreground">
+                                            {current} / {count}
                                         </div>
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-                            {previewImages.length > 1 && (
-                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                                    <CarouselPrevious className="static -translate-y-0"/>
-                                    <div className="py-2 text-center text-sm text-muted-foreground">
-                                        {current} / {count}
+                                        <CarouselNext className="static -translate-y-0"/>
                                     </div>
-                                    <CarouselNext className="static -translate-y-0"/>
-                                </div>
-                            )}
-                        </Carousel>
+                                )}
+                            </Carousel>
+                        )}
                         <Button size="icon" variant="outline" className="absolute top-4 right-4 rounded-full bg-white">
                             <Download className="h-5 w-5 text-gray-600"/>
                         </Button>
@@ -444,7 +413,3 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     </div>
   );
 }
-
-    
-
-    
