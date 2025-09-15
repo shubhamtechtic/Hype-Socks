@@ -37,6 +37,11 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
         { name: 'Polaris - Knee High', icon: '/image 7-4.png' },
         { name: 'Stellaris - Knee High', icon: '/image 7-5.png' },
         { name: 'Stirrup - Knee High', icon: '/image 7-6.png' },
+    ],
+    'Over The Knee': [
+        { name: '2 Stripes - Over The Knee', icon: '/image 8-1.png' },
+        { name: '3 Stripes - Over The Knee', icon: '/image 8-2.png' },
+        { name: 'Solid - Over The Knee', icon: '/image 8-3.png' },
     ]
 };
 
