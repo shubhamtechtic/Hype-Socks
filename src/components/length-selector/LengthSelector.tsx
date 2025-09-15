@@ -31,11 +31,11 @@ const subCategories: Record<string, { name: string; icon: string }[]> = {
         { name: 'Polaris - Crew', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/Crew-POLARIS-RIGHT-Sock-1.png' },
     ],
     'Knee High': [
-        { name: '2.0 - Knee High', icon: '/image 7-1.png' },
-        { name: 'Easton - Knee High', icon: '/image 7-2.png' },
-        { name: 'Havoc - Knee High', icon: '/image 7-3.png' },
-        { name: 'Polaris - Knee High', icon: '/image 7-4.png' },
-        { name: 'Stellaris - Knee High', icon: '/image 7-5.png' },
+        { name: '2.0 - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-2.0-RIGHT-Sock.png' },
+        { name: 'Easton - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-Easton-RIGHT-Sock.png' },
+        { name: 'Havoc - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-Havok-RIGHT-Sock.png' },
+        { name: 'Polaris - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-PolarisRIGHT-Sock.png' },
+        { name: 'Stellaris - Knee High', icon: 'https://hypesocks.com/wp-content/uploads/2024/07/KneeHigh-Stellaris-RIGHT-Sock-1.png' },
         { name: 'Stirrup - Knee High', icon: '/image 7-6.png' },
     ],
     'Over The Knee': [
