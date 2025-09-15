@@ -88,12 +88,18 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
       primaryColor: 'Black',
       secondaryColor: 'White',
       accentColor: 'Orange',
+      sockImage: sockImage,
     },
     mode: 'onChange',
   });
 
   const { watch, setValue, getValues } = form;
   const watchedLogo = watch('logo');
+  
+  React.useEffect(() => {
+    setValue('sockImage', sockImage);
+  }, [sockImage, setValue]);
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -144,7 +150,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
           description: <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4"><code className="text-white">{result.error}</code></pre>,
         });
       } else if (result.data) {
-        setGeneratedDesign(result.data.designDataUri);
+        setGeneratedDesign(result.data.generated_image_url);
       }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
@@ -168,7 +174,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
               </h2>
               <p className="mt-2 text-gray-600">Your custom sock design has been successfully added to your cart.</p>
               <div className="relative mx-auto mt-8 w-full max-w-md aspect-square">
-                  <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" />
+                  <Image src={generatedDesign} alt="Generated sock design" fill objectFit="contain" className="rounded-lg" unoptimized />
               </div>
               <div className="mt-8 flex justify-center gap-4">
                   <Button 
@@ -351,7 +357,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                         {generatedDesign ? (
                             <>
                                 <div className="relative w-full aspect-square">
-                                    <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" />
+                                    <Image src={generatedDesign} alt="Generated sock design" fill className="object-contain" unoptimized />
                                 </div>
                                 <div className="mt-8 flex justify-center gap-4">
                                      <Button 

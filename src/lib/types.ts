@@ -9,6 +9,7 @@ export const sockDesignSchema = z.object({
   primaryColor: z.string().min(1, 'Please select a primary color.'),
   secondaryColor: z.string().min(1, 'Please select a secondary color.'),
   accentColor: z.string().min(1, 'Please select an accent color.'),
+  sockImage: z.string().min(1, 'A sock image is required.'),
 });
 
 export type SockDesignForm = z.infer<typeof sockDesignSchema>;

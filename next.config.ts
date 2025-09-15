@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
         hostname: 'hypesocks.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'hypesock.s3.us-east-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
