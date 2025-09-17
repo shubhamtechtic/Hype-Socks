@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generateDesignAction } from '@/actions/generate-design-action';
 import { PlacementSelector } from '@/components/sock-builder/PlacementSelector';
 import { sockDesignSchema, type SockPart, type SockDesignForm, colors } from '@/lib/types';
-import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightbulb, Download } from 'lucide-react';
+import { Upload, Wand2, Loader2, RotateCw, ShoppingCart, CheckCircle2, X, Lightbulb, Download } from 'lucide-react'; // Upload, X, Lightbulb commented out for showcase
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
@@ -196,11 +196,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const watchedSecondaryColor = watch('secondaryColor');
   const watchedAccentColor = watch('accentColor');
   
-  React.useEffect(() => {
-    setValue('sockImage', sockImage);
-  }, [sockImage, setValue]);
-
-
+  // Handler functions
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -222,7 +218,11 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   
   const handleRemoveLogo = () => {
     setValue('logo', '', { shouldValidate: true });
-  }
+  };
+  
+  React.useEffect(() => {
+    setValue('sockImage', sockImage);
+  }, [sockImage, setValue]);
   
   const handleStartOver = () => {
     form.reset();
@@ -263,7 +263,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
     toast({
       title: "Download started",
-      description: "Your image is being downloaded.",
+      description: "Your design is being downloaded to your device.",
     });
   };
 
@@ -272,8 +272,8 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
     if (!values.primaryColor || !values.secondaryColor || !values.accentColor) {
       toast({
         variant: 'destructive',
-        title: 'Please select all colors',
-        description: 'You need to select Primary, Secondary, and Accent colors before generating.',
+        title: 'Missing colors',
+        description: 'Please select Primary, Secondary, and Accent colors before generating your design.',
       });
       return;
     }
@@ -287,18 +287,23 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
       
       console.log('Generating design with image:', zipImageToUse, '(Image', current, 'of', count, ')');
       
-      // Create a modified values object with the correct Zip image
+      // Create a modified values object with the correct Zip image and default position
       const valuesWithZipImage = {
         ...values,
-        sockImage: zipImageToUse
+        sockImage: zipImageToUse,
+        parts: 'ankle' // Default position since placement selector is commented out
       };
       
       const result = await generateDesignAction(valuesWithZipImage);
       if (result.error) {
         toast({
           variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4"><code className="text-white">{result.error}</code></pre>,
+          title: 'Failed to generate design',
+          description: result.error.includes('fetch failed') 
+            ? 'Unable to connect to the design service. Please check your internet connection and try again.'
+            : result.error.includes('API Error') 
+            ? 'The design service is temporarily unavailable. Please try again in a few moments.'
+            : 'Something went wrong while generating your design. Please try again.',
         });
       } else if (result.data) {
         setGeneratedDesign(result.data.generated_image_url);
@@ -307,8 +312,10 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
         toast({
             variant: 'destructive',
-            title: 'Uh oh! Something went wrong.',
-            description: <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4"><code className="text-white">{errorMessage}</code></pre>,
+            title: 'Failed to generate design',
+            description: errorMessage.includes('fetch failed') 
+              ? 'Unable to connect to the design service. Please check your internet connection and try again.'
+              : 'Something went wrong while generating your design. Please try again.',
         });
     } finally {
       setIsGenerating(false);
@@ -413,6 +420,8 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                         </div>
                     </div>
 
+                    {/* LOGO PLACEMENT SECTION - COMMENTED OUT FOR SHOWCASE */}
+                    {/* 
                     <div className="space-y-6">
                         <h2 className="text-xl font-semibold">Logo Placement</h2>
                         <p className="text-sm text-gray-500">Select where you want your logo to appear on the sock.</p>
@@ -433,6 +442,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                             )}
                         />
                     </div>
+                    */}
                      
                     <div>
                         <h2 className="text-xl font-semibold">Choose Colors</h2>

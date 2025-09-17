@@ -16,7 +16,7 @@ export async function generateDesignAction(values: unknown) {
 
   // Validate that the sock image is from the Zip folder
   if (!sockImage.startsWith('/Zip/')) {
-    return { error: 'Invalid sock image. Only images from the Zip folder are allowed.' };
+    return { error: 'Invalid sock image selected. Please try again.' };
   }
 
   try {
@@ -52,7 +52,7 @@ export async function generateDesignAction(values: unknown) {
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({ detail: response.statusText }));
-        throw new Error(`API Error: ${errorData.detail || 'Unknown error'}`);
+        throw new Error(`API Error: ${errorData.detail || 'Service temporarily unavailable'}`);
     }
 
     const result = await response.json();
@@ -62,6 +62,6 @@ export async function generateDesignAction(values: unknown) {
   } catch (error) {
     console.error('API call failed:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-    return { error: `Failed to generate design: ${errorMessage}` };
+    return { error: errorMessage };
   }
 }
