@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ColorPicker } from './ColorPicker';
 import { ColorPreviewCanvas } from './ColorPreviewCanvas';
+import { SockCategorySelector } from './SockCategorySelector';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 
 interface SockBuilderProps {
@@ -157,9 +158,25 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
+  const [currentSockLength, setCurrentSockLength] = React.useState(sockLength);
+  const [currentSockImage, setCurrentSockImage] = React.useState(sockImage);
+  const [expandedColorPicker, setExpandedColorPicker] = React.useState<string | null>('Primary Color');
 
   const router = useRouter();
-  const previewImages = React.useMemo(() => getImagePaths(sockLength, sockImage), [sockLength, sockImage]);
+  const previewImages = React.useMemo(() => getImagePaths(currentSockLength, currentSockImage), [currentSockLength, currentSockImage]);
+
+  // Handler for sock category changes
+  const handleSockChange = (length: string, image: string) => {
+    setCurrentSockLength(length);
+    setCurrentSockImage(image);
+    // Update the form's sockImage field
+    setValue('sockImage', image);
+  };
+
+  // Handler for color picker toggle
+  const handleColorPickerToggle = (pickerName: string) => {
+    setExpandedColorPicker(expandedColorPicker === pickerName ? null : pickerName);
+  };
 
 
   React.useEffect(() => {
@@ -185,7 +202,7 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
       primaryColor: '',
       secondaryColor: '',
       accentColor: '',
-      sockImage: sockImage,
+      sockImage: currentSockImage,
     },
     mode: 'onChange',
   });
@@ -366,6 +383,15 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
 
   return (
     <div className="container mx-auto max-w-7xl px-4">
+      {/* Sock Category Selector */}
+      <div className="mb-8">
+        <SockCategorySelector
+          currentSockLength={currentSockLength}
+          currentSockImage={currentSockImage}
+          onSockChange={handleSockChange}
+        />
+      </div>
+
        <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -457,6 +483,8 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                             description="Choose a color for the base of the sock."
                                             value={field.value}
                                             onChange={field.onChange}
+                                            isExpanded={expandedColorPicker === 'Primary Color'}
+                                            onToggle={() => handleColorPickerToggle('Primary Color')}
                                         />
                                         <FormMessage />
                                     </FormItem>
@@ -472,6 +500,8 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                             description="Choose a color for secondary elements."
                                             value={field.value}
                                             onChange={field.onChange}
+                                            isExpanded={expandedColorPicker === 'Secondary Color'}
+                                            onToggle={() => handleColorPickerToggle('Secondary Color')}
                                         />
                                         <FormMessage />
                                     </FormItem>
@@ -487,6 +517,8 @@ export function SockBuilder({ sockLength, sockImage }: SockBuilderProps) {
                                             description="Choose a color for accents and highlights."
                                             value={field.value}
                                             onChange={field.onChange}
+                                            isExpanded={expandedColorPicker === 'Accent Color'}
+                                            onToggle={() => handleColorPickerToggle('Accent Color')}
                                         />
                                         <FormMessage />
                                     </FormItem>
