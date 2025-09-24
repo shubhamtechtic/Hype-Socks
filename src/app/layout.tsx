@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-import { PageWrapper } from '@/components/layout/PageWrapper';
+import { PageWrapper } from '@/components/layout/page-wrapper';
 
 export const metadata: Metadata = {
-  title: 'SockAI',
-  description: 'Generate your custom sock design with AI',
+  title: 'Hype Socks',
+  description: 'Discover custom athletic socks from HypeSocks-engineered for comfort, durability, and style. Perfect for every sport and active lifestyle.',
 };
 
 export default function RootLayout({
