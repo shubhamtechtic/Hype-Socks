@@ -1,0 +1,60 @@
+---
+alwaysApply: true
+description: General development practices and code quality guidelines
+---
+
+# Development Practices & Code Quality
+
+## Code Organization
+- Follow the established directory structure in `src/`
+- Keep components focused and single-responsibility
+- Use descriptive file and function names
+- Group related functionality together
+
+## Git Workflow
+- Use meaningful commit messages
+- Keep commits focused and atomic
+- Follow conventional commit format when possible
+- Regularly sync with remote repository
+
+## Performance Considerations
+- Use Next.js Image component for optimized images
+- Implement proper loading states and error boundaries
+- Leverage Server Components for better performance
+- Use React.memo and useMemo for expensive computations when needed
+
+## Accessibility Standards
+- Use semantic HTML elements
+- Implement proper ARIA labels and roles
+- Ensure keyboard navigation works correctly
+- Test with screen readers and accessibility tools
+
+## Testing Strategy
+- Write tests for critical business logic
+- Test component behavior and user interactions
+- Use proper TypeScript types for test data
+- Implement integration tests for key user flows
+
+## Security Best Practices
+- Validate all user inputs
+- Use proper authentication and authorization
+- Sanitize data before rendering
+- Follow OWASP security guidelines
+
+## Documentation
+- Document complex business logic
+- Use JSDoc comments for public APIs
+- Keep README files updated
+- Document environment variables and configuration
+
+## Code Review Guidelines
+- Review for functionality, performance, and security
+- Check TypeScript types and error handling
+- Ensure consistent styling and component usage
+- Verify accessibility compliance
+
+## Environment Management
+- Use environment variables for configuration
+- Keep sensitive data out of version control
+- Use different configurations for development/production
+- Document required environment variables

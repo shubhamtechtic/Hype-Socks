@@ -1,0 +1,44 @@
+---
+globs: *.tsx,*.ts,src/app/**/*
+description: Next.js 15 and React development conventions
+---
+
+# Next.js 15 & React Conventions
+
+## App Router Structure
+- Use the App Router pattern with `src/app/` directory
+- Create route segments as folders with `page.tsx` files
+- Use `layout.tsx` for shared layouts at each route level
+- Implement `loading.tsx` and `error.tsx` for better UX
+
+## Component Patterns
+- Use `'use client'` directive only when necessary (state, event handlers, browser APIs)
+- Prefer Server Components by default for better performance
+- Use the `cn()` utility from [src/lib/utils.ts](mdc:src/lib/utils.ts) for conditional classes
+- Import components from `@/components/` using the configured path alias
+
+## Page Transitions
+- Use the `PageWrapper` component from [src/components/layout/page-wrapper.tsx](mdc:src/components/layout/page-wrapper.tsx) for consistent page transitions
+- Leverage Framer Motion's `AnimatePresence` for smooth route changes
+
+## Metadata and SEO
+- Define metadata in `layout.tsx` or `page.tsx` files using Next.js Metadata API
+- Follow the pattern in [src/app/layout.tsx](mdc:src/app/layout.tsx) for root metadata
+- Use descriptive titles and descriptions for better SEO
+
+## Image Optimization
+- Use Next.js `Image` component for optimized images
+- Configure remote patterns in [next.config.ts](mdc:next.config.ts) for external images
+- Support domains: placehold.co, picsum.photos, hypesocks.com, hypesock.s3.us-east-1.amazonaws.com
+
+## Development Server
+- Run with `npm run dev` (uses Turbopack on port 9002)
+- Use TypeScript strict mode with `tsc --noEmit` for type checking
+- Ignore build errors during development (configured in next.config.ts)
+
+## Best Practices
+- Use TypeScript interfaces for props and data structures
+- Implement proper error boundaries with `error.tsx` files
+- Use Server Actions for form submissions and data mutations
+- Follow React 18+ patterns with proper key usage and state management
+- Use the `suppressHydrationWarning` prop when necessary for client-only content

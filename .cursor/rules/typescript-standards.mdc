@@ -1,0 +1,70 @@
+---
+globs: *.ts,*.tsx
+description: TypeScript coding standards and best practices
+---
+
+# TypeScript Standards & Best Practices
+
+## Type Safety
+- Use strict TypeScript configuration with proper type checking
+- Define interfaces for all component props and data structures
+- Use type assertions sparingly and prefer type guards
+- Leverage TypeScript's strict mode features
+
+## Import/Export Patterns
+- Use named exports for components and utilities
+- Import types with `import type` syntax when possible
+- Use path aliases: `@/` for `src/` directory
+- Group imports: external libraries first, then internal modules
+
+## Component Typing
+```typescript
+// Props interface
+interface ComponentProps {
+  title: string;
+  isVisible?: boolean;
+  children: React.ReactNode;
+}
+
+// Component definition
+export function Component({ title, isVisible = false, children }: ComponentProps) {
+  // Component implementation
+}
+```
+
+## Next.js Specific Types
+- Use `NextConfig` type from `next` for configuration files
+- Import `Metadata` type for page metadata
+- Use proper typing for API routes and Server Actions
+- Leverage Next.js built-in types for routing and navigation
+
+## Utility Types
+- Use `Readonly<>` for immutable data structures
+- Leverage `Partial<>`, `Pick<>`, and `Omit<>` for type transformations
+- Use union types for component variants and states
+- Implement proper generic constraints where applicable
+
+## Error Handling
+- Define custom error types for better error handling
+- Use proper typing for async operations and promises
+- Implement type guards for runtime type checking
+- Use discriminated unions for state management
+
+## Configuration Files
+- Type configuration objects properly (e.g., `satisfies Config` in [tailwind.config.ts](mdc:tailwind.config.ts))
+- Use proper typing for environment variables and build configurations
+- Leverage TypeScript for configuration validation
+
+## Development Workflow
+- Run `npm run typecheck` for type checking without compilation
+- Use TypeScript strict mode features
+- Configure build to ignore TypeScript errors during development (see [next.config.ts](mdc:next.config.ts))
+- Use proper type definitions for all dependencies
+
+## Best Practices
+- Prefer interfaces over types for object shapes
+- Use const assertions for immutable data
+- Implement proper generic types for reusable components
+- Use proper typing for event handlers and callbacks
+- Leverage TypeScript's utility types for common patterns
+- Use proper typing for form data and validation schemas

@@ -1,0 +1,59 @@
+---
+globs: src/components/**/*,*.css
+description: UI components and styling guidelines
+---
+
+# UI Components & Styling Guidelines
+
+## Component Library
+- Use shadcn/ui components from `src/components/ui/` directory
+- All UI components are built on Radix UI primitives for accessibility
+- Components include: Button, Card, Dialog, Form, Input, Select, Toast, and more
+
+## Styling System
+- **Framework**: Tailwind CSS with custom design tokens
+- **Configuration**: [tailwind.config.ts](mdc:tailwind.config.ts) defines the complete design system
+- **Global Styles**: [src/app/globals.css](mdc:src/app/globals.css) contains CSS variables and base styles
+
+## Design Tokens
+- **Primary**: Vivid orange (`hsl(16 100% 65%)`) - main brand color
+- **Accent**: Warm pink (`hsl(334 100% 70%)`) - secondary brand color
+- **Background**: Light orange (`hsl(33 60% 96%)`) for light mode
+- **Font**: Poppins with weights 400, 500, 600, 700
+- **Border Radius**: Configurable via `--radius` CSS variable (default: 0.5rem)
+
+## Component Usage
+- Always use the `cn()` utility from [src/lib/utils.ts](mdc:src/lib/utils.ts) for conditional classes
+- Combine `clsx` and `tailwind-merge` for optimal class handling
+- Use CSS variables for theme-aware styling (e.g., `hsl(var(--primary))`)
+
+## Layout Components
+- **PageWrapper**: [src/components/layout/page-wrapper.tsx](mdc:src/components/layout/page-wrapper.tsx) - Handles page transitions with Framer Motion
+- **Header/Footer**: Place in `src/components/layout/` directory
+- Use consistent spacing and container patterns
+
+## Animation System
+- **Page Transitions**: Framer Motion with opacity fade (0.3s duration)
+- **Custom Animations**: `tilt-shaking` keyframe for interactive elements
+- **Accordion**: Built-in accordion animations for expand/collapse
+- **Tailwind Animate**: Use `tailwindcss-animate` plugin for utility animations
+
+## Responsive Design
+- Mobile-first approach with Tailwind breakpoints
+- Container max-width: 1400px with 2rem padding
+- Use responsive utilities: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+
+## Dark Mode Support
+- CSS variables automatically switch between light/dark themes
+- Use `dark:` prefix for dark mode specific styles
+- Theme switching handled via `darkMode: ['class']` configuration
+
+## Form Components
+- Use React Hook Form with Zod validation
+- Leverage shadcn/ui Form components for consistent styling
+- Implement proper error states and validation feedback
+
+## Accessibility
+- All components built on Radix UI primitives (ARIA compliant)
+- Proper focus management and keyboard navigation
+- Screen reader friendly with semantic HTML

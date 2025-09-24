@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+description: Project structure and architecture guidelines for Hype-Socks
+---
+
+# Hype-Socks Project Structure
+
+## Project Overview
+Hype-Socks is a Next.js 15 e-commerce application for custom athletic socks, built with TypeScript, Tailwind CSS, and shadcn/ui components.
+
+## Key Architecture Files
+- **Main Layout**: [src/app/layout.tsx](mdc:src/app/layout.tsx) - Root layout with Poppins font and PageWrapper
+- **Configuration**: [next.config.ts](mdc:next.config.ts) - Next.js config with image domains and build settings
+- **Styling**: [tailwind.config.ts](mdc:tailwind.config.ts) - Tailwind config with custom colors and animations
+- **Utilities**: [src/lib/utils.ts](mdc:src/lib/utils.ts) - Core utility functions including `cn()` for class merging
+
+## Directory Structure
+```
+src/
+├── app/                    # Next.js App Router pages
+├── components/
+│   ├── layout/            # Layout components (header, footer, page-wrapper)
+│   └── ui/                # shadcn/ui components
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility functions and types
+└── actions/               # Server actions
+```
+
+## Key Dependencies
+- **Framework**: Next.js 15.3.3 with App Router
+- **UI**: shadcn/ui components with Radix UI primitives
+- **Styling**: Tailwind CSS with custom design system
+- **Animation**: Framer Motion for page transitions
+- **Forms**: React Hook Form with Zod validation
+
+## Design System
+- **Primary Color**: Vivid orange (`hsl(16 100% 65%)`)
+- **Accent Color**: Warm pink (`hsl(334 100% 70%)`)
+- **Font**: Poppins (400, 500, 600, 700 weights)
+- **Theme**: Light/dark mode support with CSS variables
+
+## Development Guidelines
+- Use TypeScript for all new files
+- Follow Next.js 15 App Router conventions
+- Utilize shadcn/ui components for consistent UI
+- Implement responsive design with Tailwind CSS
+- Use the `cn()` utility for conditional styling
+- Follow the established component structure in `src/components/`
