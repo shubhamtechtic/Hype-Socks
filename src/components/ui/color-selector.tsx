@@ -54,7 +54,7 @@ export function ColorSelector({
   colors = defaultColors,
   className
 }: ColorSelectorProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true)
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed)
