@@ -23,7 +23,7 @@
     --border: 20 5.9% 90%;
     --input: 20 5.9% 90%;
     --ring: 16 100% 65%;
-    --radius: 0.5rem;
+    --radius: 1.5rem;
   }
   .dark {
     --background: 20 14% 4%;
@@ -56,4 +56,32 @@
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
   }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+svg .mask {
+    fill: #ffffff;
+    fill-opacity: 1;
+    pointer-events: none;
+}
+
+svg .static {
+    fill: #ffffff;
+    background: #ffffff;
+}
+
+svg .part-outline {
+    stroke: #afafaf;
+    stroke-width: 1;
+    stroke-opacity: .6;
+    stroke-dasharray: 3,1;
 }
