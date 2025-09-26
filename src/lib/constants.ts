@@ -28,8 +28,8 @@ export const sockLengths: SockLength[] = [
         image: TwoNOneBlankSlateSvg,
         colorRegions: [
           {
-            name: "Body",
-            description: "The main body color region",
+            name: "Primary",
+            description: "The primary color of the sock",
             selector: [
               "path.part-stirrup9.option-stirrup-9.view-back.leg-left.color2",
               "path.part-stirrup9.option-stirrup-9.view-side.leg-left.color2",
@@ -43,8 +43,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Foot",
-            description: "The foot color region",
+            name: "Secondary",
+            description: "The secondary color of the sock",
             selector: [
               "path.part-body.view-side.leg-left.color1",
               "path.part-body.view-front.leg-left.color1",
@@ -57,7 +57,7 @@ export const sockLengths: SockLength[] = [
           },
           {
             name: "Accent",
-            description: "The accent color region",
+            description: "The accent color of the sock",
             selector: [
               "text.type-text.part-text0.location-back.orientation-horizontal",
             ],
@@ -70,8 +70,8 @@ export const sockLengths: SockLength[] = [
         image: TwoNOneStripesASvg,
         colorRegions: [
           {
-            name: "Foot",
-            description: "The foot color region",
+            name: "Primary",
+            description: "The primary color of the sock",
             selector: [
               "path.part-body.view-side.leg-left.color1",
               "path.part-body.view-front.leg-left.color1",
@@ -83,8 +83,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Body",
-            description: "The main stirrup base color region",
+            name: "Secondary",
+            description: "The secondary color of the sock",
             selector: [
               "path.part-stirrup7.option-stirrup-7.view-back.leg-left.color2",
               "path.part-stirrup7.option-stirrup-7.view-side.leg-left.color2",
@@ -94,8 +94,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Stirrup Design",
-            description: "The stirrup design/pattern color region",
+            name: "Accent",
+            description: "The stirrup design/pattern color of the sock",
             selector: [
               "path.part-design7.option-stirrup-7.view-back.leg-left.color3",
               "path.part-design7.option-stirrup-7.view-side.leg-left.color3",
@@ -117,7 +117,7 @@ export const sockLengths: SockLength[] = [
         image: CrewBlankSlateSvg,
         colorRegions: [
           {
-            name: "Body",
+            name: "Primary",
             description: "The main body color region",
             selector: [
               "path.part-body.view-front.leg-left.color1",
@@ -126,7 +126,7 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Foot",
+            name: "Secondary",
             description: "The foot color region (toe and heel)",
             selector: [
               "path.part-toe.view-front.leg-left.color2",
@@ -136,8 +136,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Text",
-            description: "The text color region",
+            name: "Accent",
+            description: "The text color of the sock",
             selector: [
               "text.part-toetext.view-side.leg-left.color2",
               "text.part-toetext.view-front.leg-left.color2",
@@ -152,7 +152,7 @@ export const sockLengths: SockLength[] = [
         image: CrewStripesBSvg,
         colorRegions: [
           {
-            name: "Body",
+            name: "Primary",
             description: "The main body color region",
             selector: [
               "path.part-body.view-front.leg-left.color1",
@@ -161,7 +161,7 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Foot",
+            name: "Secondary",
             description: "The foot color region (toe and heel)",
             selector: [
               "path.part-toe.view-front.leg-left.color1.part-outline",
@@ -171,8 +171,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Stripe 1",
-            description: "The first stripe color region",
+            name: "Accent 1",
+            description: "The first stripe color of the sock",
             selector: [
               "path.part-design.view-back.leg-left.color2",
               "path.part-design.view-side.leg-left.color2",
@@ -180,8 +180,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Stripe 2",
-            description: "The second stripe color region",
+            name: "Accent 2",
+            description: "The second stripe color of the sock",
             selector: [
               "path.part-design.view-back.leg-left.color3",
               "path.part-design.view-side.leg-left.color3",
@@ -189,8 +189,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Stripe 3",
-            description: "The third stripe color region",
+            name: "Accent 3",
+            description: "The third stripe color of the sock",
             selector: [
               "path.part-design.view-back.leg-left.color4",
               "path.part-design.view-side.leg-left.color4",
@@ -198,8 +198,8 @@ export const sockLengths: SockLength[] = [
             ],
           },
           {
-            name: "Text",
-            description: "The text color region",
+            name: "Accent 4",
+            description: "The text color of the sock",
             selector: [
               "text.part-toetext.view-side.leg-left.color2",
               "text.part-toetext.view-front.leg-left.color2",
