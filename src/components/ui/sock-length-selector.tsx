@@ -206,7 +206,7 @@ export function SockLengthSelector({
                       <div className="flex justify-center mb-3">
                         <div className="w-40 h-40 relative">
                           {template.image ? (
-                            <template.image className="w-full h-full" />
+                            <template.image className="svg-template shadow-applied w-full h-full" />
                           ) : (
                             <div className="w-full h-full bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
                               No SVG

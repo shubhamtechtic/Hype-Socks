@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { SockLengthSelector } from '@/components/ui/sock-length-selector'
@@ -8,15 +8,32 @@ import { ColorSelector } from '@/components/ui/color-selector'
 import { LogoUpload } from '@/components/ui/logo-upload'
 import { SockPreview } from '@/components/ui/sock-preview'
 import { sockLengths } from '@/lib/constants'
-import { SockLength, SockTemplate } from '@/lib/types'
+import { SockLength, SockTemplate, SockColorRegion } from '@/lib/types'
 
 export default function Home() {
   const [selectedLength, setSelectedLength] = useState<SockLength | null>(null)
   const [selectedTemplate, setSelectedTemplate] = useState<SockTemplate | null>(null)
-  const [primaryColor, setPrimaryColor] = useState('#FFA500')
-  const [secondaryColor, setSecondaryColor] = useState('')
-  const [accentColor, setAccentColor] = useState('')
   const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [colorRegions, setColorRegions] = useState<(SockColorRegion & { color: string })[]>([])
+  const templateRef = useRef<SVGElement>(null)
+
+  const handleColorChange = useCallback((colorRegion: SockColorRegion & { color: string }) => {
+    setColorRegions(prev => prev.map(region => region.name === colorRegion.name ?
+      { ...region, color: colorRegion.color }
+      : region
+    ))
+  }, [setColorRegions])
+
+
+  useEffect(() => {
+    if (!selectedTemplate) return
+    if (!templateRef.current) return
+    const colorRegions: (SockColorRegion & { color: string })[] = [];
+    selectedTemplate.colorRegions.forEach(region => {
+      colorRegions.push({ ...region, color: '#000000' })
+    })
+    setColorRegions(colorRegions)
+  }, [selectedTemplate, templateRef.current])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -55,37 +72,27 @@ export default function Home() {
 
                 {/* Color Selectors */}
                 <div className="space-y-4">
-                  <ColorSelector
-                    title="Primary Color"
-                    description="Choose a color for the base of the sock."
-                    selectedColor={primaryColor}
-                    onColorChange={setPrimaryColor}
-                  />
-                  
-                  <ColorSelector
-                    title="Secondary Color"
-                    description="Choose a secondary color for accents."
-                    selectedColor={secondaryColor}
-                    onColorChange={setSecondaryColor}
-                  />
-                  
-                  <ColorSelector
-                    title="Accent Color"
-                    description="Choose an accent color for highlights."
-                    selectedColor={accentColor}
-                    onColorChange={setAccentColor}
-                  />
+                  {colorRegions.map((colorRegion) => (
+                    <ColorSelector
+                      key={colorRegion.name}
+                      title={colorRegion.name}
+                      description={colorRegion.description}
+                      selectedColor={colorRegion.color}
+                      onColorChange={(color) => handleColorChange(
+                        { ...colorRegion, color }
+                      )}
+                    />
+                  ))}
                 </div>
               </div>
 
               {/* Right Column - Preview */}
               <div>
                 <SockPreview
-                  selectedTemplate={selectedTemplate}
-                  primaryColor={primaryColor}
-                  secondaryColor={secondaryColor}
-                  accentColor={accentColor}
+                  ref={templateRef}
                   logoFile={logoFile}
+                  colorRegions={colorRegions}
+                  selectedTemplate={selectedTemplate}
                 />
               </div>
             </div>

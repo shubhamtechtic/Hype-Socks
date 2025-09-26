@@ -131,16 +131,16 @@ export function Footer() {
                 size="icon"
             >
                 <svg width="32" height="30" className='!size-auto' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#33475b">
-                    <g clip-path="url(#messages__clip0_14307_15730)">
-                        <path fill-opacity="0.01" d="M0 0h24v24H0z"></path>
+                    <g clipPath="url(#messages__clip0_14307_15730)">
+                        <path fillOpacity="0.01" d="M0 0h24v24H0z"></path>
                         <mask id="messages__b" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24" style={{ maskType: 'alpha' }}>
-                            <g clip-path="url(#messages__clip1_14307_15730)">
-                                <g clip-path="url(#messages__clip2_14307_15730)">
+                            <g clipPath="url(#messages__clip1_14307_15730)">
+                                <g clipPath="url(#messages__clip2_14307_15730)">
                                     <mask id="messages__a" maskUnits="userSpaceOnUse" x="1" y="0" width="23" height="23" style={{
                                         maskType: 'alpha'
                                     }}>
                                         <path d="M2.571 22.286h-.008.008z"></path>
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.143 4.286c1.414 0 2.571 1.157 2.571 2.571v8.572c0 1.414-1.157 2.571-2.571 2.571H7.209l-4.037 4.037c-.162.162-.384.247-.606.248-.11 0-.219-.017-.32-.068-.317-.128-.532-.445-.532-.788V6.857c0-1.414 1.157-2.571 2.572-2.571h12.857zM4.286 6c-.472 0-.857.386-.857.857v12.506l2.82-2.82c.162-.163.377-.249.608-.249h10.286c.471 0 .857-.385.857-.857V6.866c0-.472-.386-.857-.857-.857H4.286V6z"></path>
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M17.143 4.286c1.414 0 2.571 1.157 2.571 2.571v8.572c0 1.414-1.157 2.571-2.571 2.571H7.209l-4.037 4.037c-.162.162-.384.247-.606.248-.11 0-.219-.017-.32-.068-.317-.128-.532-.445-.532-.788V6.857c0-1.414 1.157-2.571 2.572-2.571h12.857zM4.286 6c-.472 0-.857.386-.857.857v12.506l2.82-2.82c.162-.163.377-.249.608-.249h10.286c.471 0 .857-.385.857-.857V6.866c0-.472-.386-.857-.857-.857H4.286V6z"></path>
                                         <path d="M20.571.857c1.415 0 2.572 1.158 2.572 2.572V12c0 .472-.386.857-.857.857-.472 0-.857-.385-.857-.857V3.43c0-.472-.386-.857-.858-.857H7.714c-.471 0-.857-.386-.857-.857 0-.472.386-.858.857-.858h12.857z"></path>
                                     </mask>
                                     <g mask="url(#messages__a)">

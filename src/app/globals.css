@@ -54,7 +54,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
   }
 }
 
@@ -68,20 +68,85 @@
   }
 }
 
-svg .mask {
-    fill: #ffffff;
-    fill-opacity: 1;
-    pointer-events: none;
+.svg-template .mask {
+  fill: #ffffff;
+  fill-opacity: 1;
+  pointer-events: none;
 }
 
-svg .static {
-    fill: #ffffff;
-    background: #ffffff;
+.svg-template .static {
+  fill: #ffffff;
+  background: #ffffff;
 }
 
-svg .part-outline {
-    stroke: #afafaf;
-    stroke-width: 1;
-    stroke-opacity: .6;
-    stroke-dasharray: 3,1;
+.svg-template .part-outline {
+  stroke: #afafaf;
+  stroke-width: 1;
+  stroke-opacity: 0.6;
+  stroke-dasharray: 3, 1;
+}
+
+.svg-template {
+  margin: auto;
+}
+
+.svg-template .mask {
+  fill: #ffffff;
+  fill-opacity: 1;
+  pointer-events: none;
+}
+
+.area-logo,
+.area-toetext,
+.svg-template .area-text {
+  fill-opacity: 0.001;
+  stroke-opacity: 0.001;
+  pointer-events: none;
+}
+
+.svg-template .part-outline {
+  stroke: #afafaf;
+  stroke-width: 1;
+  stroke-opacity: 0.6;
+  stroke-dasharray: 3, 1;
+}
+
+.svg-template .static {
+  fill: #ffffff;
+  background: #ffffff;
+}
+
+.svg-template .static-inverse {
+  fill: #373737 !important;
+}
+
+.svg-template .orientation-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  word-spacing: -0.8em;
+}
+
+.svg-template .orientation-sideways {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.svg-template .orientation-horizontal {
+  letter-spacing: 0.05em;
+}
+
+.svg-template .part-toetext {
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  word-spacing: 0;
+  stroke: none;
+}
+
+.svg-template .clickable {
+  cursor: pointer;
+}
+
+.svg-template .unclickable {
+  pointer-events: none;
 }

@@ -4,26 +4,23 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
-import { SockTemplate } from '@/lib/types'
+import { SockColorRegion, SockTemplate } from '@/lib/types'
 import { motion } from 'framer-motion'
+import React from 'react'
 
 interface SockPreviewProps {
-  selectedTemplate: SockTemplate | null
-  primaryColor: string
-  secondaryColor?: string
-  accentColor?: string
-  logoFile: File | null
   className?: string
+  logoFile: File | null
+  selectedTemplate: SockTemplate | null
+  colorRegions: (SockColorRegion & { color: string })[]
 }
 
-export function SockPreview({
+export const SockPreview = React.forwardRef(({
   selectedTemplate,
-  primaryColor,
-  secondaryColor,
-  accentColor,
+  colorRegions,
   logoFile,
   className
-}: SockPreviewProps) {
+}: SockPreviewProps, ref: React.Ref<SVGElement>) => {
   const handleDownload = () => {
     // Demo functionality - in a real app, this would generate and download the preview
     console.log('Download preview clicked')
@@ -43,12 +40,10 @@ export function SockPreview({
         <div className="relative">
           <div className="bg-white rounded-lg border border-gray-200 p-8 min-h-[300px] flex items-center justify-center">
             {selectedTemplate?.image ? (
-              <selectedTemplate.image className="w-full h-full object-contain"/>
+              <selectedTemplate.image ref={ref} className="svg-template shadow-applied w-full h-full object-contain"/>
             ) : (
               <div className="text-center text-gray-400">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-t-full flex items-center justify-center">
-                  <span className="text-2xl">🧦</span>
-                </div>
+                <p className="text-6xl mb-4">🧦</p>
                 <p className="text-sm">Select a template to see preview</p>
               </div>
             )}
@@ -83,11 +78,11 @@ export function SockPreview({
             className="mt-4 text-center"
           >
             <p className="text-sm text-gray-600">
-              {selectedTemplate.name} Template
+              {selectedTemplate.name}
             </p>
           </motion.div>
         )}
       </div>
     </Card>
   )
-}
+})
