@@ -16,6 +16,7 @@ export default function Home() {
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [colorRegions, setColorRegions] = useState<(SockColorRegion & { color: string })[]>([])
   const templateRef = useRef<SVGElement>(null)
+  const [colorSelectors, setColorSelectors] = useState<{ [key: string]: boolean }>({})
 
   const handleColorChange = useCallback((colorRegion: SockColorRegion & { color: string }) => {
     setColorRegions(prev => prev.map(region => region.name === colorRegion.name ?
@@ -29,6 +30,18 @@ export default function Home() {
       element.style.fill = colorRegion.color
     })
   }, [setColorRegions, templateRef.current])
+
+  const handleColorSelectorToggle = useCallback((region: string, isOpen: boolean) => {
+    // close other color selectors
+    const newState = { ...colorSelectors }
+    if (isOpen) {
+      Object.keys(newState).forEach(key => {
+        newState[key] = false
+      })
+    }
+    newState[region] = isOpen
+    setColorSelectors(newState)
+  }, [setColorSelectors, colorSelectors])
 
 
   useEffect(() => {
@@ -102,6 +115,8 @@ export default function Home() {
                       onColorChange={(color) => handleColorChange(
                         { ...colorRegion, color }
                       )}
+                      isOpen={colorSelectors[colorRegion.name]}
+                      onToggle={(isOpen) => handleColorSelectorToggle(colorRegion.name, isOpen)}
                     />
                   ))}
                 </div>

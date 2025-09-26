@@ -12,6 +12,8 @@ interface ColorSelectorProps {
   selectedColor: string
   onColorChange: (color: string) => void
   colors?: string[]
+  isOpen: boolean
+  onToggle: (isOpen: boolean) => void
   className?: string
 }
 
@@ -52,14 +54,16 @@ export function ColorSelector({
   selectedColor,
   onColorChange,
   colors = defaultColors,
+  isOpen,
+  onToggle,
   className
 }: ColorSelectorProps) {
-  const [isCollapsed, setIsCollapsed] = useState(true)
-  const selectedColorInColors = colors.includes(selectedColor)
+  const selectedColorInColors = colors.map(color => color.toLowerCase())
+    .includes(selectedColor.toLowerCase())
   const availableColors = selectedColorInColors ? colors : [selectedColor, ...colors]
 
   const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed)
+    onToggle?.(!isOpen)
   }
 
   return (
@@ -78,15 +82,15 @@ export function ColorSelector({
           <motion.button
             onClick={toggleCollapse}
             className="ml-4 p-1 hover:bg-gray-100 rounded transition-colors duration-200"
-            aria-label={isCollapsed ? "Expand" : "Collapse"}
+            aria-label={isOpen ? "Expand" : "Collapse"}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
             <motion.div
-              animate={{ rotate: isCollapsed ? 0 : 180 }}
+              animate={{ rotate: isOpen ? 0 : 180 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              {isCollapsed ? (
+              {isOpen ? (
                 <Plus className="size-6 text-gray-500" />
               ) : (
                 <Minus className="size-6 text-gray-500" />
@@ -97,20 +101,20 @@ export function ColorSelector({
 
         {/* Color Grid */}
         <AnimatePresence>
-          {!isCollapsed && (
+          {isOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ 
-                duration: 0.3, 
+              transition={{
+                duration: 0.3,
                 ease: "easeInOut",
                 opacity: { duration: 0.2 }
               }}
               className="overflow-hidden"
             >
               {description && (
-                <motion.p 
+                <motion.p
                   className="text-sm text-gray-600 mb-3"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -119,7 +123,7 @@ export function ColorSelector({
                   {description}
                 </motion.p>
               )}
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-9 lg:grid-cols-11 gap-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -139,8 +143,8 @@ export function ColorSelector({
                     aria-label={`Select color ${color}`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ 
-                      delay: 0.2 + (index * 0.02), 
+                    transition={{
+                      delay: 0.2 + (index * 0.02),
                       duration: 0.2,
                       ease: "easeOut"
                     }}
@@ -150,7 +154,7 @@ export function ColorSelector({
                     {/* Checkmark for selected color */}
                     <AnimatePresence>
                       {selectedColor === color && (
-                        <motion.div 
+                        <motion.div
                           className="w-full h-full flex items-center justify-center"
                           initial={{ opacity: 0, scale: 0 }}
                           animate={{ opacity: 1, scale: 1 }}
