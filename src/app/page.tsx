@@ -36,7 +36,7 @@ export default function Home() {
     if (!templateRef.current) return
     const colorRegions: (SockColorRegion & { color: string })[] = [];
     selectedTemplate.colorRegions.forEach(region => {
-      if (!region.selector) {
+      if (!region.selector.length) {
         colorRegions.push({ ...region, color: '#000000' })
         return
       }

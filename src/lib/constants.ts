@@ -59,9 +59,7 @@ export const sockLengths: SockLength[] = [
             name: "Accent",
             description: "The accent color region",
             selector: [
-              "text.type-text.part-text0.location-back.orientation-horizontal.leg-left",
-              "text.type-text.part-text0.location-side.orientation-horizontal.leg-left",
-              "text.type-text.part-text0.location-front.orientation-horizontal.leg-left",
+              "text.type-text.part-text0.location-back.orientation-horizontal",
             ],
           },
         ],
@@ -103,7 +101,7 @@ export const sockLengths: SockLength[] = [
               "path.part-design7.option-stirrup-7.view-side.leg-left.color3",
               "path.part-design7.option-stirrup-7.view-front.leg-left.color3",
             ],
-          }
+          },
         ],
       },
     ],
@@ -117,7 +115,36 @@ export const sockLengths: SockLength[] = [
         id: "crew_blank-slate",
         name: "Blank Slate",
         image: CrewBlankSlateSvg,
-        colorRegions: [],
+        colorRegions: [
+          {
+            name: "Body",
+            description: "The main body color region",
+            selector: [
+              "path.part-body.view-front.leg-left.color1",
+              "path.part-body.view-side.leg-left.color1",
+              "path.part-body.view-back.leg-left.color1",
+            ],
+          },
+          {
+            name: "Foot",
+            description: "The foot color region (toe and heel)",
+            selector: [
+              "path.part-toe.view-front.leg-left.color2",
+              "path.part-toe.view-side.leg-left.color2",
+              "path.part-heel.view-side.leg-left.color2",
+              "path.part-heel.view-back.leg-left.color2",
+            ],
+          },
+          {
+            name: "Text",
+            description: "The text color region",
+            selector: [
+              "text.part-toetext.view-side.leg-left.color2",
+              "text.part-toetext.view-front.leg-left.color2",
+              "text.type-text.part-text0.location-rim-outside.orientation-horizontal",
+            ],
+          },
+        ],
       },
       {
         id: "crew_stripes-b",
@@ -125,9 +152,58 @@ export const sockLengths: SockLength[] = [
         image: CrewStripesBSvg,
         colorRegions: [
           {
+            name: "Body",
+            description: "The main body color region",
+            selector: [
+              "path.part-body.view-front.leg-left.color1",
+              "path.part-body.view-side.leg-left.color1",
+              "path.part-body.view-back.leg-left.color1",
+            ],
+          },
+          {
+            name: "Foot",
+            description: "The foot color region (toe and heel)",
+            selector: [
+              "path.part-toe.view-front.leg-left.color1.part-outline",
+              "path.part-toe.view-side.leg-left.color1.part-outline",
+              "path.part-heel.view-side.leg-left.color1.part-outline",
+              "path.part-heel.view-back.leg-left.color1.part-outline",
+            ],
+          },
+          {
             name: "Stripe 1",
-            description: "The first stripe",
-            selector: [],
+            description: "The first stripe color region",
+            selector: [
+              "path.part-design.view-back.leg-left.color2",
+              "path.part-design.view-side.leg-left.color2",
+              "path.part-design.view-front.leg-left.color2",
+            ],
+          },
+          {
+            name: "Stripe 2",
+            description: "The second stripe color region",
+            selector: [
+              "path.part-design.view-back.leg-left.color3",
+              "path.part-design.view-side.leg-left.color3",
+              "path.part-design.view-front.leg-left.color3",
+            ],
+          },
+          {
+            name: "Stripe 3",
+            description: "The third stripe color region",
+            selector: [
+              "path.part-design.view-back.leg-left.color4",
+              "path.part-design.view-side.leg-left.color4",
+              "path.part-design.view-front.leg-left.color4",
+            ],
+          },
+          {
+            name: "Text",
+            description: "The text color region",
+            selector: [
+              "text.part-toetext.view-side.leg-left.color2",
+              "text.part-toetext.view-front.leg-left.color2",
+            ],
           },
         ],
       },
