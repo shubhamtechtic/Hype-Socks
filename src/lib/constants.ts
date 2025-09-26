@@ -26,13 +26,85 @@ export const sockLengths: SockLength[] = [
         id: "2n1_blank-slate",
         name: "Blank Slate",
         image: TwoNOneBlankSlateSvg,
-        colorRegions: [],
+        colorRegions: [
+          {
+            name: "Body",
+            description: "The main body color region",
+            selector: [
+              "path.part-stirrup9.option-stirrup-9.view-back.leg-left.color2",
+              "path.part-stirrup9.option-stirrup-9.view-side.leg-left.color2",
+              "path.part-stirrup9.option-stirrup-9.view-front.leg-left.color2",
+              "path.part-toe.view-side.leg-left.color2",
+              "path.part-toe.view-front.leg-left.color2",
+              "path.part-heel.view-side.leg-left.color2",
+              "path.part-heel.view-back.leg-left.color2",
+              "text.part-toetext.view-front.leg-left.color2",
+              "text.part-toetext.view-side.leg-left.color2",
+            ],
+          },
+          {
+            name: "Foot",
+            description: "The foot color region",
+            selector: [
+              "path.part-body.view-side.leg-left.color1",
+              "path.part-body.view-front.leg-left.color1",
+              "path.part-body.view-back.leg-left.color1",
+              "path.part-toe.view-side.leg-left.color1.part-outline",
+              "path.part-toe.view-front.leg-left.color1.part-outline",
+              "path.part-heel.view-side.leg-left.color1.part-outline",
+              "path.part-heel.view-back.leg-left.color1.part-outline",
+            ],
+          },
+          {
+            name: "Accent",
+            description: "The accent color region",
+            selector: [
+              "text.type-text.part-text0.location-back.orientation-horizontal.leg-left",
+              "text.type-text.part-text0.location-side.orientation-horizontal.leg-left",
+              "text.type-text.part-text0.location-front.orientation-horizontal.leg-left",
+            ],
+          },
+        ],
       },
       {
         id: "2n1-stripes-a",
         name: "Stripes A",
         image: TwoNOneStripesASvg,
-        colorRegions: [],
+        colorRegions: [
+          {
+            name: "Foot",
+            description: "The foot color region",
+            selector: [
+              "path.part-body.view-side.leg-left.color1",
+              "path.part-body.view-front.leg-left.color1",
+              "path.part-body.view-back.leg-left.color1",
+              "path.part-toe.view-side.leg-left.color1.part-outline",
+              "path.part-toe.view-front.leg-left.color1.part-outline",
+              "path.part-heel.view-side.leg-left.color1.part-outline",
+              "path.part-heel.view-back.leg-left.color1.part-outline",
+            ],
+          },
+          {
+            name: "Body",
+            description: "The main stirrup base color region",
+            selector: [
+              "path.part-stirrup7.option-stirrup-7.view-back.leg-left.color2",
+              "path.part-stirrup7.option-stirrup-7.view-side.leg-left.color2",
+              "path.part-stirrup7.option-stirrup-7.view-front.leg-left.color2",
+              "path.part-solepattern.view-back.leg-left.color2",
+              "path.part-solepattern.view-side.leg-left.color2",
+            ],
+          },
+          {
+            name: "Stirrup Design",
+            description: "The stirrup design/pattern color region",
+            selector: [
+              "path.part-design7.option-stirrup-7.view-back.leg-left.color3",
+              "path.part-design7.option-stirrup-7.view-side.leg-left.color3",
+              "path.part-design7.option-stirrup-7.view-front.leg-left.color3",
+            ],
+          }
+        ],
       },
     ],
   },
@@ -55,11 +127,7 @@ export const sockLengths: SockLength[] = [
           {
             name: "Stripe 1",
             description: "The first stripe",
-            selector: [
-              "path.part-design.view-side.leg-left.color2",
-              "path.part-design.view-front.leg-left.color2",
-              "path.part-design.view-back.leg-left.color2",
-            ],
+            selector: [],
           },
         ],
       },

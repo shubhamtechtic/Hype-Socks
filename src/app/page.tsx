@@ -41,12 +41,15 @@ export default function Home() {
         return
       }
       // get the color from the first element
+      // console.log(templateRef.current)
+      // console.log(region.selector.join(', '))
       const elements = templateRef.current!.querySelectorAll(region.selector.join(', '))
-      // @ts-ignore
-      const color = elements[0].style.fill
-      if (!color) {
-        colorRegions.push({ ...region, color: '#000000' })
-        return
+      let color = '#000000'
+      try {
+        // @ts-ignore
+        color = elements[0].style.fill
+      } catch (error) {
+        console.error(region.name, region.selector, elements[0], error)
       }
       colorRegions.push({ ...region, color: color })
     })
