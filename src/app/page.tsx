@@ -22,7 +22,13 @@ export default function Home() {
       { ...region, color: colorRegion.color }
       : region
     ))
-  }, [setColorRegions])
+    if (!colorRegion.selector) return
+    const elements = templateRef.current!.querySelectorAll(colorRegion.selector.join(', '))
+    elements.forEach(element => {
+      // @ts-ignore
+      element.style.fill = colorRegion.color
+    })
+  }, [setColorRegions, templateRef.current])
 
 
   useEffect(() => {
@@ -30,7 +36,19 @@ export default function Home() {
     if (!templateRef.current) return
     const colorRegions: (SockColorRegion & { color: string })[] = [];
     selectedTemplate.colorRegions.forEach(region => {
-      colorRegions.push({ ...region, color: '#000000' })
+      if (!region.selector) {
+        colorRegions.push({ ...region, color: '#000000' })
+        return
+      }
+      // get the color from the first element
+      const elements = templateRef.current!.querySelectorAll(region.selector.join(', '))
+      // @ts-ignore
+      const color = elements[0].style.fill
+      if (!color) {
+        colorRegions.push({ ...region, color: '#000000' })
+        return
+      }
+      colorRegions.push({ ...region, color: color })
     })
     setColorRegions(colorRegions)
   }, [selectedTemplate, templateRef.current])

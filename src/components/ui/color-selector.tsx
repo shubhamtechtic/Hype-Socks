@@ -55,6 +55,8 @@ export function ColorSelector({
   className
 }: ColorSelectorProps) {
   const [isCollapsed, setIsCollapsed] = useState(true)
+  const selectedColorInColors = colors.includes(selectedColor)
+  const availableColors = selectedColorInColors ? colors : [selectedColor, ...colors]
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed)
@@ -123,7 +125,7 @@ export function ColorSelector({
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.15, duration: 0.2 }}
               >
-                {colors.map((color, index) => (
+                {availableColors.map((color, index) => (
                   <motion.button
                     key={index}
                     onClick={() => onColorChange(color)}
