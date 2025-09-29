@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
-import { SockColorRegion, SockTemplate } from '@/lib/types'
+import { SockColorRegion, SockTemplate, SockTextRegionWithId } from '@/lib/types'
 import { motion } from 'framer-motion'
 import React from 'react'
 
@@ -13,11 +13,13 @@ interface SockPreviewProps {
   logoFile: File | null
   selectedTemplate: SockTemplate | null
   colorRegions: (SockColorRegion & { color: string })[]
+  textRegions?: SockTextRegionWithId[]
 }
 
 export const SockPreview = React.forwardRef(({
   selectedTemplate,
   colorRegions,
+  textRegions = [],
   logoFile,
   className
 }: SockPreviewProps, ref: React.Ref<SVGElement>) => {

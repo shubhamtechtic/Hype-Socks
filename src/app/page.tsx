@@ -7,14 +7,16 @@ import { SockLengthSelector } from '@/components/ui/sock-length-selector'
 import { ColorSelector } from '@/components/ui/color-selector'
 import { LogoUpload } from '@/components/ui/logo-upload'
 import { SockPreview } from '@/components/ui/sock-preview'
+import { TextEditor } from '@/components/ui/text-editor'
 import { sockLengths } from '@/lib/constants'
-import { SockLength, SockTemplate, SockColorRegion } from '@/lib/types'
+import { SockLength, SockTemplate, SockColorRegion, SockTextRegion } from '@/lib/types'
 
 export default function Home() {
   const [selectedLength, setSelectedLength] = useState<SockLength | null>(null)
   const [selectedTemplate, setSelectedTemplate] = useState<SockTemplate | null>(null)
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [colorRegions, setColorRegions] = useState<(SockColorRegion & { color: string })[]>([])
+  const [textRegions, setTextRegions] = useState<SockTextRegion[]>([])
   const templateRef = useRef<SVGElement>(null)
   const [colorSelectors, setColorSelectors] = useState<{ [key: string]: boolean }>({})
 
@@ -43,6 +45,40 @@ export default function Home() {
     setColorSelectors(newState)
   }, [setColorSelectors, colorSelectors])
 
+  const handleTextChange = useCallback((regionId: string, text: string) => {
+    const textRegion = textRegions.find(region => region.id === regionId)
+    if (!textRegion) return
+    setTextRegions(prev => prev.map(region => 
+      region.id === regionId ? { ...region, text } : region
+    ))
+    if (!textRegion.selectors.length) return
+    const elements = templateRef.current!.querySelectorAll(textRegion.selectors.join(', '))
+    elements.forEach(element => {
+      // @ts-ignore
+      element.textContent = text
+    })
+  }, [templateRef.current])
+
+  const handleTextColorChange = useCallback((regionId: string, color: string) => {
+    const textRegion = textRegions.find(region => region.id === regionId)
+    if (!textRegion) return
+    setTextRegions(prev => prev.map(region => 
+      region.id === regionId ? { ...region, color } : region
+    ))
+    if (!textRegion.selectors.length) return
+    const elements = templateRef.current!.querySelectorAll(textRegion.selectors.join(', '))
+    elements.forEach(element => {
+      // @ts-ignore
+      element.style.fill = color
+    })
+  }, [templateRef.current])
+
+  const handleTextLocationChange = useCallback((regionId: string, location: any) => {
+    setTextRegions(prev => prev.map(region => 
+      region.id === regionId ? { ...region, textLocation: location } : region
+    ))
+  }, [])
+
 
   useEffect(() => {
     if (!selectedTemplate) return
@@ -67,6 +103,13 @@ export default function Home() {
       colorRegions.push({ ...region, color: color })
     })
     setColorRegions(colorRegions)
+
+    // Initialize text regions
+    if (!selectedTemplate.textRegions) {
+      setTextRegions([])
+      return
+    }
+    setTextRegions(selectedTemplate.textRegions)
   }, [selectedTemplate, templateRef.current])
 
   return (
@@ -120,6 +163,14 @@ export default function Home() {
                     />
                   ))}
                 </div>
+
+                {/* Text Editor */}
+                <TextEditor
+                  textRegions={textRegions}
+                  onTextChange={handleTextChange}
+                  onColorChange={handleTextColorChange}
+                  onLocationChange={handleTextLocationChange}
+                />
               </div>
 
               {/* Right Column - Preview */}
@@ -128,6 +179,7 @@ export default function Home() {
                   ref={templateRef}
                   logoFile={logoFile}
                   colorRegions={colorRegions}
+                  textRegions={textRegions}
                   selectedTemplate={selectedTemplate}
                 />
               </div>

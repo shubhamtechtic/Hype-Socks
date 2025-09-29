@@ -63,6 +63,17 @@ export const sockLengths: SockLength[] = [
             ],
           },
         ],
+        textRegions: [
+          {
+            id: "text-region-0",
+            selectors: [
+              "text.type-text.part-text0",
+            ],
+            text: "SF",
+            color: "#000000",
+            textLocation: "BACK",
+          },
+        ],
       },
       {
         id: "2n1-stripes-a",
